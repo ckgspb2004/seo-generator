@@ -7,137 +7,240 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; }
+        body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .neon-text {
             background: linear-gradient(to right, #00f2ea, #00ff41, #7000ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .glass-card {
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(8, 8, 8, 0.9);
             border: 1px solid #1a1a1a;
             border-radius: 24px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
         }
         .neon-btn {
             background: linear-gradient(90deg, #00f2ea, #0072ff);
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(0, 242, 234, 0.3);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 242, 234, 0.2);
         }
         .neon-btn:hover {
-            box-shadow: 0 0 30px rgba(0, 242, 234, 0.6);
+            box-shadow: 0 0 30px rgba(0, 242, 234, 0.5);
             transform: translateY(-2px);
+            filter: brightness(1.1);
         }
-        input, textarea, select {
+        .input-style {
             background: #050505 !important;
             border: 1px solid #222 !important;
             color: #fff !important;
             border-radius: 12px !important;
+            transition: 0.3s;
         }
-        input:focus { border-color: #00f2ea !important; outline: none; }
+        .input-style:focus { border-color: #00f2ea !important; box-shadow: 0 0 15px rgba(0, 242, 234, 0.1); outline: none; }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, #00f2ea 0%, #0072ff 100%);
+            width: 60px; height: 60px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 900; color: #fff;
+            box-shadow: 0 0 25px rgba(0, 242, 234, 0.3);
+        }
+
+        .step-indicator { color: #333; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; }
+        .step-active { color: #00f2ea; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+        
         .hidden { display: none; }
+        pre { scrollbar-width: thin; scrollbar-color: #222 #000; }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="p-6 md:p-12">
 
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-3xl mx-auto">
         <!-- HEADER -->
-        <div class="text-center mb-10">
-            <div class="inline-block px-4 py-1 border border-cyan-500/30 rounded-full text-cyan-400 text-xs font-bold mb-4">PREMIUM SYSTEM 2026</div>
-            <h1 class="text-5xl md:text-6xl font-900 neon-text font-black mb-2">AI ARCHITECT PRO</h1>
-            <p class="text-gray-500 uppercase tracking-widest text-sm">Enterprise Prompt Generation</p>
+        <div class="flex flex-col items-center mb-12">
+            <div class="logo-icon mb-4">Г</div>
+            <h1 class="text-4xl md:text-5xl font-black neon-text mb-2 tracking-tighter">AI ARCHITECT PRO</h1>
+            <p class="text-zinc-600 uppercase tracking-[0.3em] text-[10px] font-bold">Enterprise Generation System</p>
         </div>
 
-        <!-- ШАГ 1 -->
-        <div id="step1" class="glass-card p-8">
-            <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="text-cyan-400 mr-2">01.</span> Бизнес и Маркетинг</h2>
-            <div class="space-y-4">
-                <div><label class="text-gray-400 text-sm">Название проекта</label><input id="name" type="text" class="w-full p-3 mt-1" placeholder="CyberStore X"></div>
-                <div><label class="text-gray-400 text-sm">Главный оффер (H1)</label><input id="header" type="text" class="w-full p-3 mt-1" placeholder="Лучшая плитка в СПб"></div>
-                <div><label class="text-gray-400 text-sm">Суть продукта</label><textarea id="desc" class="w-full p-3 mt-1 h-24" placeholder="Опишите продукт..."></textarea></div>
-                <div><label class="text-gray-400 text-sm">Ссылка на изображение</label><input id="img" type="text" class="w-full p-3 mt-1" placeholder="https://site.ru/img.jpg"></div>
-                <div><label class="text-gray-400 text-sm">Цена (RUB)</label><input id="price" type="text" class="w-full p-3 mt-1" value="1000"></div>
-                <button onclick="toStep(2)" class="neon-btn w-full py-4 font-bold text-lg mt-4">ДАЛЕЕК ДИЗАЙНУ →</button>
+        <!-- PROGRESS BAR -->
+        <div class="flex justify-between mb-8 px-2">
+            <div id="ind1" class="step-indicator step-active">01. ПРОДУКТ</div>
+            <div id="ind2" class="step-indicator">02. ВИЗУАЛ</div>
+            <div id="ind3" class="step-indicator">03. ОПЛАТА</div>
+            <div id="ind4" class="step-indicator">04. ФИНАЛ</div>
+        </div>
+
+        <!-- STEP 1: PRODUCT -->
+        <div id="step1" class="glass-card p-8 animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-zinc-200">💎 Информация о продукте</h3>
+            <div class="space-y-5">
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Название бренда</label><input id="name" type="text" class="input-style w-full p-4 mt-1" placeholder="CyberStore X"></div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Главный заголовок (H1)</label><input id="header" type="text" class="input-style w-full p-4 mt-1" placeholder="Например: Плитка из Европы с доставкой"></div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Описание для ИИ</label><textarea id="desc" class="input-style w-full p-4 mt-1 h-28" placeholder="Опишите суть вашего бизнеса..."></textarea></div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Ссылка на изображение/референс</label><input id="img" type="text" class="input-style w-full p-4 mt-1" placeholder="https://example.com/image.jpg"></div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Цена товара (RUB)</label><input id="price" type="number" class="input-style w-full p-4 mt-1" value="1000"></div>
+                <button onclick="nextStep(2)" class="neon-btn w-full py-5 font-black text-white rounded-xl mt-4">ПРОДОЛЖИТЬ →</button>
             </div>
         </div>
 
-        <!-- ШАГ 2 -->
-        <div id="step2" class="glass-card p-8 hidden">
-            <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="text-cyan-400 mr-2">02.</span> Дизайн и Технологии</h2>
-            <div class="space-y-4">
-                <div><label class="text-gray-400 text-sm">Цвет акцента</label><input id="color" type="color" class="w-full h-12 mt-1" value="#00f2ea"></div>
-                <div><label class="text-gray-400 text-sm">Пароль админа</label><input id="pass" type="text" class="w-full p-3 mt-1" value="AdminPass2026!"></div>
+        <!-- STEP 2: DESIGN -->
+        <div id="step2" class="glass-card p-8 hidden animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-zinc-200">🎨 Визуальная стратегия</h3>
+            <div class="space-y-5">
                 <div class="flex gap-4">
-                    <button onclick="toStep(1)" class="w-1/2 py-4 bg-zinc-900 rounded-xl font-bold">← НАЗАД</button>
-                    <button onclick="generate()" class="neon-btn w-1/2 py-4 font-bold">СОЗДАТЬ ТЗ →</button>
+                    <div class="w-1/2">
+                        <label class="text-zinc-500 text-xs font-bold uppercase ml-1">Цвет фона</label>
+                        <input id="bgColor" type="color" class="input-style w-full h-14 mt-1 p-1 cursor-pointer" value="#000000">
+                    </div>
+                    <div class="w-1/2">
+                        <label class="text-zinc-500 text-xs font-bold uppercase ml-1">Цвет кнопок</label>
+                        <input id="accentColor" type="color" class="input-style w-full h-14 mt-1 p-1 cursor-pointer" value="#00f2ea">
+                    </div>
+                </div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Стиль интерфейса</label>
+                    <select id="style" class="input-style w-full p-4 mt-1">
+                        <option>Премиальный Минимализм</option>
+                        <option>Футуристичный Hi-Tech</option>
+                        <option>Строгий Деловой</option>
+                    </select>
+                </div>
+                <div><label class="text-zinc-500 text-xs font-bold uppercase ml-1">Мастер-пароль админа</label><input id="pass" type="text" class="input-style w-full p-4 mt-1" value="SecureKey2026!"></div>
+                <div class="flex gap-4 mt-4">
+                    <button onclick="nextStep(1)" class="w-1/3 py-5 bg-zinc-900 rounded-xl font-bold text-zinc-400">← НАЗАД</button>
+                    <button onclick="nextStep(3)" class="neon-btn w-2/3 py-5 font-black text-white rounded-xl">К ОПЛАТЕ →</button>
                 </div>
             </div>
         </div>
 
-        <!-- РЕЗУЛЬТАТ -->
-        <div id="result" class="hidden">
-            <div class="glass-card p-8 border-cyan-500/50">
-                <h2 class="text-2xl font-bold mb-4 text-cyan-400">🔥 ЭКСПЕРТНОЕ ТЗ ГОТОВО</h2>
-                <pre id="promptResult" class="bg-black p-4 rounded-xl text-xs text-gray-300 whitespace-pre-wrap border border-zinc-800 mb-6"></pre>
+        <!-- STEP 3: PAYMENT -->
+        <div id="step3" class="glass-card p-8 hidden animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-zinc-200">💳 Платежные системы</h3>
+            <div class="space-y-4">
+                <label class="flex items-center space-x-3 p-4 bg-zinc-950 rounded-xl border border-zinc-900 cursor-pointer hover:border-cyan-500/50 transition">
+                    <input type="checkbox" class="w-5 h-5 accent-cyan-500" checked id="pay1">
+                    <span class="text-zinc-300 font-bold">ЮMoney (Quickpay / Карты РФ)</span>
+                </label>
+                <label class="flex items-center space-x-3 p-4 bg-zinc-950 rounded-xl border border-zinc-900 cursor-pointer hover:border-cyan-500/50 transition">
+                    <input type="checkbox" class="w-5 h-5 accent-cyan-500" id="pay2">
+                    <span class="text-zinc-300 font-bold">NowPayments (Криптовалюты)</span>
+                </label>
+                <div class="flex gap-4 mt-8">
+                    <button onclick="nextStep(2)" class="w-1/3 py-5 bg-zinc-900 rounded-xl font-bold text-zinc-400">← НАЗАД</button>
+                    <button onclick="generateFinal()" class="neon-btn w-2/3 py-5 font-black text-white rounded-xl">СФОРМИРОВАТЬ ТЗ →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: FINAL RESULT -->
+        <div id="step4" class="hidden animate-fade-in">
+            <div class="glass-card p-8 border-cyan-500/40">
+                <h3 class="text-2xl font-black mb-6 text-white flex items-center">🚀 ЭКСПЕРТНОЕ ТЗ ГОТОВО</h3>
                 
-                <div class="bg-cyan-900/20 p-4 rounded-xl border border-cyan-500/30 mb-6">
-                    <h4 class="text-cyan-400 font-bold text-sm mb-2">📋 ЧТО ДЕЛАТЬ:</h4>
-                    <p class="text-xs text-gray-300 leading-relaxed">
-                        1. Скопируйте текст выше.<br>
-                        2. Отправьте его в <b>ChatGPT-4</b> или <b>Claude 3.5</b>.<br>
-                        3. Пишите ИИ: <b>"Создай файл config.php"</b>.
-                    </p>
+                <div class="relative group">
+                    <pre id="resultPrompt" class="result-box w-full bg-black p-6 rounded-2xl text-[13px] text-zinc-300 overflow-x-auto border border-zinc-800 whitespace-pre-wrap leading-relaxed max-h-[400px]"></pre>
+                    <div class="absolute top-4 right-4 text-[10px] text-zinc-600 font-bold uppercase">System Prompt Architect v4.5</div>
                 </div>
 
-                <button onclick="copyPrompt()" class="w-full py-4 bg-white text-black font-black rounded-xl mb-4 hover:bg-cyan-400 transition">КОПИРОВАТЬ ТЗ (ПРОМТ)</button>
-                <button onclick="location.reload()" class="w-full py-2 text-gray-500 text-sm">🔄 НОВЫЙ ПРОЕКТ</button>
+                <!-- ИНСТРУКЦИЯ ДЛЯ КЛИЕНТА -->
+                <div class="mt-8 p-6 bg-cyan-950/20 border border-cyan-500/30 rounded-2xl">
+                    <h4 class="text-cyan-400 font-black text-sm uppercase mb-4 tracking-widest flex items-center">
+                        <span class="bg-cyan-500 text-black px-2 py-0.5 rounded mr-2 text-[10px]">ВАЖНО</span> ЧТО ДЕЛАТЬ ДАЛЬШЕ?
+                    </h4>
+                    <ul class="text-zinc-400 text-sm space-y-3 leading-relaxed">
+                        <li class="flex items-start"><span class="text-cyan-500 mr-2 font-black">1.</span> Нажмите кнопку "КОПИРОВАТЬ ПРОМТ" ниже.</li>
+                        <li class="flex items-start"><span class="text-cyan-500 mr-2 font-black">2.</span> Перейдите в <b>ChatGPT-4</b> или <b>Claude 3.5 Sonnet</b>.</li>
+                        <li class="flex items-start"><span class="text-cyan-500 mr-2 font-black">3.</span> Вставьте этот текст первым сообщением. Это «настроит» ИИ на ваш проект.</li>
+                        <li class="flex items-start"><span class="text-cyan-500 mr-2 font-black">4.</span> Когда ИИ ответит «Готов», напишите ему: <b>"Создай файл config.php"</b>.</li>
+                        <li class="flex items-start"><span class="text-cyan-500 mr-2 font-black">5.</span> Далее запрашивайте остальные файлы из списка по одному.</li>
+                    </ul>
+                </div>
+
+                <button onclick="copyToClipboard()" class="w-full py-6 bg-white text-black font-black rounded-2xl mt-8 text-xl hover:bg-cyan-400 transition-all duration-300 shadow-xl shadow-white/5">КОПИРОВАТЬ ПРОМТ</button>
+                <button onclick="location.reload()" class="w-full py-4 text-zinc-600 font-bold text-sm uppercase mt-4 hover:text-white transition">🔄 Создать новый проект</button>
             </div>
         </div>
 
-        <p class="text-center text-zinc-800 text-xs mt-10 font-bold uppercase tracking-widest">© 2026 PREMIUM AI ARCHITECT SYSTEM</p>
+        <!-- FOOTER -->
+        <p class="text-center text-zinc-800 text-[10px] font-black uppercase tracking-[0.4em] mt-12 mb-20">
+            💎 Premium AI Architect System | v.4.5 | 2026
+        </p>
     </div>
 
     <script>
-        function toStep(s) {
-            document.getElementById('step1').classList.add('hidden');
-            document.getElementById('step2').classList.add('hidden');
-            document.getElementById('result').classList.add('hidden');
+        function nextStep(s) {
+            document.querySelectorAll('[id^="step"]').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.step-indicator').forEach(el => el.classList.remove('step-active'));
+            
             document.getElementById('step' + s).classList.remove('hidden');
+            document.getElementById('ind' + s).classList.add('step-active');
+            window.scrollTo(0,0);
         }
 
-        function generate() {
-            const data = {
+        function generateFinal() {
+            const d = {
                 name: document.getElementById('name').value,
                 header: document.getElementById('header').value,
                 desc: document.getElementById('desc').value,
                 price: document.getElementById('price').value,
                 img: document.getElementById('img').value,
-                color: document.getElementById('color').value,
-                pass: document.getElementById('pass').value
+                bg: document.getElementById('bgColor').value,
+                accent: document.getElementById('accentColor').value,
+                style: document.getElementById('style').value,
+                pass: document.getElementById('pass').value,
+                pays: []
             };
+            if(document.getElementById('pay1').checked) d.pays.push("ЮMoney (SHA-1)");
+            if(document.getElementById('pay2').checked) d.pays.push("NowPayments (HMAC)");
 
-            const prompt = `Ты — Senior Full-Stack Architect и CTO.
-ЗАДАЧА: Спроектировать магазин "${data.name}".
-ИНСТРУКЦИЯ: На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+            const prompt = `Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки e-commerce систем премиум-класса. 
 
-ДАННЫЕ:
-- Название: ${data.name} | Цена: ${data.price} RUB
-- H1: ${data.header}
-- Описание: ${data.desc}
-- Картинка: ${data.img || 'standard.jpg'}
-- Стек: PHP 8.1, SQLite3, Tailwind CSS.
-- Пароль админа: ${data.pass}
-- Дизайн: Фон #000, Акцент ${data.color}.
+### ТВОЯ РОЛЬ
+- Ты проектируешь масштабируемую и безопасную архитектуру для проекта "${d.name}".
+- На запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без вступлений и пояснений.
+- Используй современные стандарты PHP 8.1+ и SQLite3.
 
-ПЕРВАЯ МИССИЯ: Предложи структуру базы данных. Жди команды для config.php.`;
+### КОНТЕКСТ ПРОЕКТА
+- **Бренд:** ${d.name}
+- **Оффер:** ${d.header}
+- **Бизнес-задача:** ${d.desc}
+- **Цена:** ${d.price} RUB
 
-            document.getElementById('promptResult').innerText = prompt;
-            toStep('result');
+### ТЕХНИЧЕСКИЙ СТЕК
+- **Backend:** Native PHP 8.1 (без фреймворков, работа на Shared-хостинге).
+- **Database:** SQLite3 (база создается автоматически).
+- **Frontend:** Tailwind CSS (CDN), адаптивная верстка Mobile-first.
+- **Безопасность:** Защита от SQL-инъекций, XSS и проверка подписей платежей.
+
+### ФАЙЛОВАЯ СТРУКТУРА
+1. index.php — лендинг с высокой конверсией.
+2. config.php — настройки, ключи оплаты и пароль админа (${d.pass}).
+3. admin.php — панель управления (статистика, смена цен, лог заказов).
+4. thank_you.php — страница выдачи товара.
+5. callback.php — обработчик уведомлений (${d.pays.join(", ")}).
+
+### ДИЗАЙН-СИСТЕМА
+- **Стиль:** ${d.style}
+- **Палитра:** Фон ${d.bg}, Акцент ${d.accent}
+- **Визуал:** Использовать референс ${d.img || 'стандартный'}
+
+### ПЕРВАЯ МИССИЯ
+Проанализируй вводные данные. Предложи структуру таблиц SQLite и схему взаимодействия файлов. Жди моей команды для генерации кода config.php.`;
+
+            document.getElementById('resultPrompt').innerText = prompt;
+            nextStep(4);
         }
 
-        function copyPrompt() {
-            const text = document.getElementById('promptResult').innerText;
+        function copyToClipboard() {
+            const text = document.getElementById('resultPrompt').innerText;
             navigator.clipboard.writeText(text);
-            alert('ТЗ скопировано в буфер обмена!');
+            const btn = document.querySelector('[onclick="copyToClipboard()"]');
+            btn.innerText = "СКОПИРОВАНО!";
+            btn.style.background = "#00ff41";
+            setTimeout(() => {
+                btn.innerText = "КОПИРОВАТЬ ПРОМТ";
+                btn.style.background = "#ffffff";
+            }, 2000);
         }
     </script>
 </body>
