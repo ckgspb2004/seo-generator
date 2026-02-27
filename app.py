@@ -1,163 +1,243 @@
 import streamlit as st
 
-# 1. КОНФИГУРАЦИЯ И СТИЛЬ (Premium Black)
-st.set_page_config(page_title="PRO Generator v4.0", page_icon="🏗️", layout="centered")
+# 1. КОНФИГУРАЦИЯ И УЛЬТРА-ДИЗАЙН
+st.set_page_config(page_title="AI Architecture PRO", page_icon="💎", layout="centered")
 
 st.markdown("""
     <style>
-    .stApp { background-color: #000000; color: #ffffff; }
-    .logo-container { text-align: center; padding: 20px 0; }
-    .logo-icon {
-        background: linear-gradient(135deg, #00f2ea 0%, #0072ff 100%);
-        width: 70px; height: 70px; border-radius: 20px;
-        display: inline-flex; align-items: center; justify-content: center;
-        font-size: 40px; font-weight: 900; color: white;
-        box-shadow: 0 0 30px rgba(0, 242, 234, 0.3); margin-bottom: 10px;
-    }
-    .main-title { font-size: 2.5rem; font-weight: 850; background: linear-gradient(90deg, #fff, #555); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* Стилизация карточек ввода */
+    .stApp { background-color: #000000; color: #ffffff; font-family: 'Inter', sans-serif; }
+    
+    /* Градиентный заголовок */
+    .main-title {
+        text-align: center;
+        background: linear-gradient(to right, #00f2ea, #00ff41, #7000ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 3.5rem;
+        font-weight: 900;
+        letter-spacing: -2px;
+        margin-bottom: 5px;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #555;
+        font-size: 1rem;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    /* Стилизация полей ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
-        border: 1px solid #222 !important; border-radius: 12px !important; background-color: #050505 !important;
+        border: 1px solid #1a1a1a !important;
+        border-radius: 16px !important;
+        background-color: #050505 !important;
+        transition: 0.3s;
     }
-    
+    div[data-baseweb="input"]:focus-within {
+        border-color: #00f2ea !important;
+        box-shadow: 0 0 20px rgba(0, 242, 234, 0.1);
+    }
+
+    /* Подсвеченные кнопки */
     .stButton > button {
-        background: #ffffff !important; color: #000 !important; border-radius: 12px !important;
-        height: 55px; font-weight: 800 !important; border: none !important; width: 100%;
+        background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 14px !important;
+        height: 60px;
+        width: 100%;
+        font-weight: 900 !important;
+        font-size: 1.1rem !important;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.4s;
+        box-shadow: 0 4px 15px rgba(0, 242, 234, 0.3);
     }
-    .stButton > button:hover { background: #00f2ea !important; box-shadow: 0 0 20px #00f2ea66; }
-    
-    .prompt-box {
-        background: #0a0a0a; border: 1px solid #1ed760; border-radius: 15px;
-        padding: 20px; font-family: 'Consolas', monospace; font-size: 13px; color: #ddd; line-height: 1.5;
+    .stButton > button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(0, 242, 234, 0.6);
+        filter: brightness(1.1);
     }
+
+    /* Кнопка скачивания (особенная) */
+    .download-btn {
+        display: inline-block;
+        padding: 20px 40px;
+        background: #ffffff;
+        color: #000000 !important;
+        border-radius: 50px;
+        font-weight: 900;
+        text-decoration: none;
+        text-align: center;
+        margin-top: 20px;
+        border: 2px solid #00f2ea;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    /* Контейнер результата */
+    .result-container {
+        background: #080808;
+        border: 1px solid #111;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 20px;
+        line-height: 1.6;
+    }
+
+    /* Прячем стандартные элементы */
+    footer {visibility: hidden;}
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# Инициализация стейта
+# 2. ЛОГИКА ШАГОВ
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
         "name": "", "price": "1000", "header": "", "sub": "", "desc": "", 
-        "features": "", "cta": "Купить сейчас", "img": "", 
-        "theme": "#1a1200", "accent": "#f59e0b", "admin_pass": "Admin777#",
-        "pays": ["ЮMoney (Quickpay)"]
+        "features": "", "cta": "ПОЛУЧИТЬ ДОСТУП", "img": "", 
+        "theme": "#000000", "accent": "#00f2ea", "admin_pass": "SecurePass99#",
+        "pays": ["ЮMoney"]
     }
 
-# ЛОГО
-st.markdown('<div class="logo-container"><div class="logo-icon">Г</div><div class="main-title">PRO ГЕНЕРАТОР ТЗ</div></div>', unsafe_allow_html=True)
+def next_step(): st.session_state.step += 1
+def prev_step(): st.session_state.step -= 1
 
-# ШАГ 1: МАРКЕТИНГ
+# --- ШАПКА ---
+st.markdown('<div class="main-title">AI PRO GEN</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">System Architecture & Marketing Generator</div>', unsafe_allow_html=True)
+
+# --- ШАГ 1: МАРКЕТИНГ ---
 if st.session_state.step == 1:
-    st.subheader("📦 01. Информация и Маркетинг")
-    st.session_state.data["name"] = st.text_input("Название проекта (Бренд)", value=st.session_state.data["name"])
-    st.session_state.data["price"] = st.text_input("Цена товара (цифрами, в рублях)", value=st.session_state.data["price"])
-    st.session_state.data["header"] = st.text_input("Главный заголовок (H1)", placeholder="Например: Керамическая плитка в СПб")
-    st.session_state.data["sub"] = st.text_input("Подзаголовок", placeholder="Широкий ассортимент в наличии...")
-    st.session_state.data["desc"] = st.text_area("Описание продукта (для блока 'О нас')", height=100)
-    st.session_state.data["features"] = st.text_area("Преимущества (каждое с новой строки)", placeholder="- Свой склад\n- Быстрая доставка")
-    st.session_state.data["img"] = st.text_input("Ссылка на картинку товара", placeholder="https://site.ru/image.jpg")
+    st.markdown("### 💎 01. Концепция и Продажи")
+    st.session_state.data["name"] = st.text_input("Название бренда/проекта", value=st.session_state.data["name"])
+    st.session_state.data["header"] = st.text_input("Убойный заголовок (H1)", placeholder="Например: Твой бизнес на автопилоте")
+    st.session_state.data["sub"] = st.text_input("Подзаголовок (выгода)", placeholder="Сделаем всё за 24 часа с гарантией...")
+    st.session_state.data["desc"] = st.text_area("Полное описание продукта", height=100)
+    st.session_state.data["features"] = st.text_area("Список преимуществ (каждое с новой строки)")
+    st.session_state.data["price"] = st.text_input("Стоимость (в рублях)", value=st.session_state.data["price"])
     
-    if st.button("ДАЛЕЕ: ТЕХНИЧЕСКИЙ СТИЛЬ →"):
+    if st.button("ПЕРЕЙТИ К ДИЗАЙНУ →"):
         if st.session_state.data["name"] and st.session_state.data["header"]:
-            st.session_state.step = 2
+            next_step()
             st.rerun()
-        else: st.error("Заполни Название и Заголовок!")
+        else: st.error("Заполните название и заголовок!")
 
-# ШАГ 2: ВИЗУАЛ
+# --- ШАГ 2: ТЕХНИЧЕСКИЙ ВИЗУАЛ ---
 elif st.session_state.step == 2:
-    st.subheader("🎨 02. Внешний вид и Доступ")
+    st.markdown("### 🎨 02. Визуальный код")
     col1, col2 = st.columns(2)
     with col1:
-        st.session_state.data["theme"] = st.color_picker("Цвет фона сайта", value="#1a1200")
+        st.session_state.data["theme"] = st.color_picker("Цвет фона", value=st.session_state.data["theme"])
     with col2:
-        st.session_state.data["accent"] = st.color_picker("Акцентный цвет (кнопки)", value="#f59e0b")
+        st.session_state.data["accent"] = st.color_picker("Цвет кнопок", value=st.session_state.data["accent"])
     
-    st.session_state.data["admin_pass"] = st.text_input("Пароль администратора (будет вшит в конфиг)", value=st.session_state.data["admin_pass"])
+    st.session_state.data["admin_pass"] = st.text_input("Мастер-пароль админа", value=st.session_state.data["admin_pass"])
     
+    st.write("")
     c1, c2 = st.columns(2)
-    if c1.button("← НАЗАД"): st.session_state.step = 1; st.rerun()
-    if c2.button("ДАЛЕЕ: ПЛАТЕЖИ →"): st.session_state.step = 3; st.rerun()
+    with c1: 
+        if st.button("← НАЗАД"): prev_step(); st.rerun()
+    with c2: 
+        if st.button("К ПЛАТЕЖАМ →"): next_step(); st.rerun()
 
-# ШАГ 3: ПЛАТЕЖИ
+# --- ШАГ 3: ИНТЕГРАЦИИ ---
 elif st.session_state.step == 3:
-    st.subheader("💳 03. Платежные системы")
-    st.session_state.data["pays"] = st.multiselect("Выберите системы для интеграции", 
-                                                ["ЮMoney (Quickpay)", "NowPayments (Крипто)"], 
-                                                default=st.session_state.data["pays"])
+    st.markdown("### 💳 03. Платёжные шлюзы")
+    st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", 
+                                                ["ЮMoney (API)", "NowPayments (Крипто)", "Stripe", "PayPal"], 
+                                                default=["ЮMoney (API)"])
     
-    st.info("Программа автоматически пропишет логику проверки SHA-1 и HMAC подписей для этих систем.")
-    
+    st.write("")
     c1, c2 = st.columns(2)
-    if c1.button("← НАЗАД"): st.session_state.step = 2; st.rerun()
-    if c2.button("🚀 СГЕНЕРИРОВАТЬ ПРОФЕССИОНАЛЬНОЕ ТЗ"): st.session_state.step = 4; st.rerun()
+    with c1: 
+        if st.button("← НАЗАД"): prev_step(); st.rerun()
+    with c2: 
+        if st.button("⚡ СОЗДАТЬ ФИНАЛЬНЫЙ ПРОМТ"): next_step(); st.rerun()
 
-# ШАГ 4: ФИНАЛЬНЫЙ ПРОМТ (Аналог Орфеева)
+# --- ШАГ 4: РЕЗУЛЬТАТ ---
 elif st.session_state.step == 4:
-    st.subheader("🔥 Ваше экспертное ТЗ")
+    st.markdown("### 🚀 ВАШ ЭКСПЕРТНЫЙ ПРОМТ ГОТОВ")
     
     d = st.session_state.data
     
-    # ФОРМИРУЕМ МОЩНЫЙ ТЕКСТ
-    full_prompt = f"""Ты — senior full-stack разработчик с глубоким опытом в e-commerce.
+    # ФОРМИРУЕМ МОЩНЫЙ ПРОМТ
+    expert_prompt = f"""Ты — Senior Full-Stack разработчик и Архитектор систем. Твоя специализация — высоконагруженные e-commerce проекты.
 
-## ЗАДАЧА
-Создать профессиональный магазин одного цифрового товара. Работай итерациями: я называю файл, ты выдаешь ТОЛЬКО чистый код этого файла без пояснений.
+ЗАДАЧА
+Спроектировать и написать код для онлайн-магазина "{d['name']}". 
+Работай в режиме пошаговой выдачи файлов. На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый, оптимизированный код без лишних пояснений.
 
-## ПРОЕКТ
-Название: {d['name']}
-Язык: Русский
-Цена: {d['price']} RUB
+ДАННЫЕ ПРОЕКТА
+- Бренд: {d['name']}
+- Цена товара: {d['price']} RUB
 
-## МАРКЕТИНГОВЫЙ КОНТЕНТ
+МАРКЕТИНГОВАЯ СТРУКТУРА
 Заголовок: {d['header']}
 Подзаголовок: {d['sub']}
 Описание: {d['desc']}
 Преимущества:
 {chr(10).join([f'- {line}' for line in d['features'].splitlines()])}
 CTA кнопка: {d['cta']}
-Изображение: {d['img'] if d['img'] else 'standard_placeholder.jpg'}
 
-## ФАЙЛОВАЯ СТРУКТУРА
-- index.php (Лендинг)
-- thank_you.php (Страница успеха/скачивания)
-- admin.php (Панель управления)
-- config.php (Конфигурация и пароли)
-- callback_yoomoney.php (Обработчик платежей)
-- callback_nowpayments.php (Обработчик крипто)
-- /goods/ (Папка для файлов продажи)
-- /uploads/ (Папка для картинок)
+ТЕХНИЧЕСКИЙ СТЕК
+- Язык: PHP 8.1+ (Native)
+- База данных: SQLite3 (автоматическое создание таблиц)
+- Стили: Tailwind CSS via CDN
+- Верстка: Адаптивная, Mobile-first
 
-## ТЕХНИЧЕСКИЙ СТЕК
-- PHP 8.1+ (Native)
-- SQLite3 (База данных заказов)
-- Tailwind CSS (CDN)
-- Адаптивность: Mobile-first
+АРХИТЕКТУРА ФАЙЛОВ
+1. index.php — Лендинг с высокой конверсией
+2. thank_you.php — Страница выдачи товара
+3. admin.php — Панель управления (доступ: {d['admin_pass']})
+4. config.php — Конфиг (БД, ключи, настройки)
+5. callback.php — Обработчик платежей ({", ".join(d['pays'])})
 
-## ЦВЕТОВАЯ СХЕМА
+ЛОГИКА ОПЛАТЫ И БЕЗОПАСНОСТИ
+- Реализовать строгую проверку контрольной подписи (SHA-1/HMAC) для входящих уведомлений.
+- Использовать подготовленные выражения SQL для защиты от инъекций.
+- Все ключи и пароли хранить исключительно в config.php.
+
+ДИЗАЙН
 Фон: {d['theme']}
 Акцент: {d['accent']}
-Стиль: Профессиональный, строгий, премиальные отступы и тени.
+Стиль: Премиальный минимализм, четкая типографика, плавные тени.
 
-## ЛОГИКА ОПЛАТЫ
-{"1. ЮMoney: Проверка SHA-1 подписи (notification_type&operation_id&amount&currency&datetime&sender&codepro&{secret}&label). Статус заказа обновляется при совпадении хэша." if "ЮMoney (Quickpay)" in d['pays'] else ""}
-{"2. NowPayments: Проверка HMAC-SHA512 подписи заголовка x-nowpayments-sig. Обработка статуса 'finished'." if "NowPayments (Крипто)" in d['pays'] else ""}
+ОГРАНИЧЕНИЯ
+- Никаких внешних зависимостей (composer не использовать).
+- Код должен работать "из коробки" на любом shared-хостинге (Beget/Reg.ru).
+"""
 
-## АДМИН-ПАНЕЛЬ
-- Доступ по паролю: {d['admin_pass']}
-- Функции: Изменение цены, настройка кошельков/API ключей, загрузка файла товара, просмотр списка заказов (SQLite).
+    st.markdown('<div class="result-container">', unsafe_allow_html=True)
+    st.code(expert_prompt, language="text")
+    st.markdown('</div>', unsafe_allow_html=True)
 
-## ОГРАНИЧЕНИЯ
-- Код должен работать на shared-хостинге (Beget/Reg.ru).
-- Никакого Composer, только чистый PHP.
-- SQLite база создается автоматически при первом посещении."""
+    # ИНСТРУКЦИЯ
+    st.info("""
+    👉 **ЧТО ДЕЛАТЬ ДАЛЬШЕ?**
+    1. Скопируйте текст выше (иконка в углу рамки).
+    2. Зайдите в **ChatGPT (версия GPT-4)** или **Claude 3.5 Sonnet**.
+    3. Вставьте этот текст первым сообщением.
+    4. Когда нейросеть подтвердит готовность, пишите ей: **"Создай config.php"**, а затем по очереди остальные файлы.
+    """)
 
-    st.markdown(f'<div class="prompt-box"><pre style="white-space: pre-wrap;">{full_prompt}</pre></div>', unsafe_allow_html=True)
+    # КНОПКА СКАЧИВАНИЯ
+    st.download_button(
+        label="📥 СКАЧАТЬ ТЗ ФАЙЛОМ",
+        data=expert_prompt,
+        file_name=f"TZ_{d['name']}.txt",
+        mime="text/plain",
+        help="Нажмите, чтобы сохранить ТЗ на компьютер"
+    )
     
-    st.write("")
-    st.download_button("📥 СКАЧАТЬ ТЗ В .TXT", full_prompt)
     if st.button("🔄 НОВЫЙ ПРОЕКТ"):
         st.session_state.step = 1
         st.rerun()
 
-st.markdown("<br><center style='color: #444;'>© 2024 AI Engineering System</center>", unsafe_allow_html=True)
+st.markdown("<br><center style='color: #222;'>💎 PREMIUM AI SYSTEM 2024</center>", unsafe_allow_html=True)
