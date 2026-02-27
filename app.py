@@ -1,50 +1,57 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
-# 1. КОНФИГУРАЦИЯ И ЯДЕРНЫЙ CSS ДЛЯ ОЧИСТКИ
+# 1. КОНФИГУРАЦИЯ
 st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
+# 2. ИНЪЕКЦИЯ СКРИПТА-УБИЙЦЫ (JavaScript)
+# Этот скрипт будет искать и удалять элементы Streamlit каждые 100мс
+components.html(
+    """
+    <script>
+    const removeStreamlitBranding = () => {
+        // Убираем корону (Deploy button)
+        const deployBtn = window.parent.document.querySelector(".stDeployButton");
+        if (deployBtn) deployBtn.remove();
+
+        // Убираем футер (Hosted with Streamlit)
+        const footer = window.parent.document.querySelector("footer");
+        if (footer) footer.remove();
+
+        // Убираем Badge (красную кнопку в углу)
+        const badges = window.parent.document.querySelectorAll('[data-testid="stViewerBadge"]');
+        badges.forEach(badge => badge.remove());
+        
+        const toolbar = window.parent.document.querySelector('div[class*="stToolbar"]');
+        if (toolbar) toolbar.remove();
+    };
+    
+    // Запускаем цикл проверки
+    setInterval(removeStreamlitBranding, 100);
+    </script>
+    """,
+    height=0,
+)
+
+# 3. CSS ДЛЯ ВЕРСТКИ
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* 1. УЛЬТРА-ОЧИСТКА (МЕТОД ТЕРМИНАТОРА) */
-    /* Скрываем всё через официальные ID тестов Streamlit */
-    [data-testid="stViewerBadge"], 
-    [data-testid="stHeader"], 
-    [data-testid="stDecoration"], 
-    [data-testid="stStatusWidget"],
-    footer, .stDeployButton {
-        display: none !important;
-        max-height: 0px !important;
-        visibility: hidden !important;
-        opacity: 0 !important;
-    }
+    /* Скрываем всё через CSS (дублирующий слой) */
+    #MainMenu {visibility: hidden !important;}
+    header {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    .stDeployButton {display:none !important;}
+    [data-testid="stViewerBadge"] {display: none !important;}
 
-    /* Создаем физическую черную "заплатку" в правом нижнем углу экрана */
-    /* Это перекроет кнопку, даже если она принудительно вылезет */
-    .stApp::after {
-        content: "";
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        width: 200px;
-        height: 50px;
-        background: #000000 !important;
-        z-index: 999999;
-    }
-
-    /* 2. ГЛАВНЫЙ ПРЕМИУМ-СТИЛЬ */
+    /* ГЛАВНЫЙ СТИЛЬ */
     .stApp { 
         background-color: #000000 !important; 
         color: #ffffff !important; 
         font-family: 'Inter', sans-serif; 
     }
     
-    /* Фикс для видимости всех текстов */
-    .stMarkdown, p, label, .stSelectbox, .stTextInput, .stTextArea {
-        color: white !important;
-    }
-
     .main-title {
         text-align: center;
         background: linear-gradient(to right, #00f2ea, #00ff41, #7000ff);
@@ -65,14 +72,14 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
-    /* Стили полей ввода */
+    /* Поля ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
         border: 1px solid #222 !important;
         border-radius: 16px !important;
         background-color: #050505 !important;
     }
 
-    /* Кнопки навигации (Неон) */
+    /* Кнопки */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: white !important;
@@ -84,7 +91,6 @@ st.markdown("""
         text-transform: uppercase;
     }
 
-    /* Кнопка СКАЧАТЬ (Белая с неоновой рамкой) */
     .stDownloadButton > button {
         background: #ffffff !important;
         color: #000000 !important;
@@ -95,7 +101,6 @@ st.markdown("""
         font-weight: 900 !important;
         font-size: 1.3rem !important;
         text-transform: uppercase !important;
-        box-shadow: 0 0 30px rgba(0, 242, 234, 0.4) !important;
     }
 
     .result-box {
@@ -119,7 +124,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. ЛОГИКА
+# 4. ЛОГИКА
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
@@ -132,23 +137,21 @@ if 'data' not in st.session_state:
 st.markdown('<div class="main-title">AI ARCHITECT PRO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Premium Enterprise Generation System</div>', unsafe_allow_html=True)
 
-# ШАГ 1
 if st.session_state.step == 1:
-    st.markdown("### 💎 01. Продукт и Контекст")
+    st.markdown("### 💎 01. Информация о продукте")
     st.session_state.data["name"] = st.text_input("Название проекта/бренда", value=st.session_state.data["name"])
     st.session_state.data["header"] = st.text_input("Главный оффер (Заголовок H1)", value=st.session_state.data["header"])
     st.session_state.data["sub"] = st.text_input("Подзаголовок (УТП)", value=st.session_state.data["sub"])
     st.session_state.data["desc"] = st.text_area("Детальное описание продукта", value=st.session_state.data["desc"], height=100)
-    st.session_state.data["img_link"] = st.text_input("Ссылка на референс изображения", value=st.session_state.data["img_link"])
+    st.session_state.data["img_link"] = st.text_input("Ссылка на изображение товара", value=st.session_state.data["img_link"])
     st.session_state.data["features"] = st.text_area("Преимущества (списком)", value=st.session_state.data["features"])
-    st.session_state.data["price"] = st.text_input("Цена в рублях", value=st.session_state.data["price"])
+    st.session_state.data["price"] = st.text_input("Цена товара (RUB)", value=st.session_state.data["price"])
     
-    if st.button("ПЕРЕЙТИ К ТЕХНИЧЕСКИМ НАСТРОЙКАМ →"):
+    if st.button("ДАЛЕЕ →"):
         if st.session_state.data["name"] and st.session_state.data["header"]:
             st.session_state.step = 2
             st.rerun()
 
-# ШАГ 2
 elif st.session_state.step == 2:
     st.markdown("### 🎨 02. Визуальная стратегия")
     col1, col2 = st.columns(2)
@@ -156,14 +159,12 @@ elif st.session_state.step == 2:
         st.session_state.data["theme_color"] = st.color_picker("Фон", value=st.session_state.data["theme_color"])
     with col2:
         st.session_state.data["accent_color"] = st.color_picker("Акцент", value=st.session_state.data["accent_color"])
-    
     st.session_state.data["admin_pass"] = st.text_input("Пароль админа", value=st.session_state.data["admin_pass"])
     
     c1, c2 = st.columns(2)
     if c1.button("← НАЗАД"): st.session_state.step = 1; st.rerun()
-    if c2.button("К ОПЛАТЕ →"): st.session_state.step = 3; st.rerun()
+    if c2.button("ДАЛЕЕ →"): st.session_state.step = 3; st.rerun()
 
-# ШАГ 3
 elif st.session_state.step == 3:
     st.markdown("### 💳 03. Платёжные шлюзы")
     st.session_state.data["pays"] = st.multiselect("Выберите системы", 
@@ -171,31 +172,18 @@ elif st.session_state.step == 3:
                                                 default=["ЮMoney (Quickpay)"])
     c1, c2 = st.columns(2)
     if c1.button("← НАЗАД"): st.session_state.step = 2; st.rerun()
-    if c2.button("⚡ ГЕНЕРИРОВАТЬ ЭКСПЕРТНОЕ ТЗ"): st.session_state.step = 4; st.rerun()
+    if c2.button("⚡ СГЕНЕРИРОВАТЬ ЭКСПЕРТНОЕ ТЗ"): st.session_state.step = 4; st.rerun()
 
-# ШАГ 4
 elif st.session_state.step == 4:
-    st.markdown("### 🚀 ВАША СИСТЕМНАЯ ИНСТРУКЦИЯ ГОТОВА")
-    
+    st.markdown("### 🚀 ВАШ ЭКСПЕРТНЫЙ ПРОМТ ГОТОВ")
     d = st.session_state.data
-    
-    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом.
-
+    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки.
 ЗАДАЧА: Спроектировать высококонверсионный магазин "{d['name']}". 
-ПРАВИЛО: На запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
-
-БИЗНЕС-ДАННЫЕ:
-- Продукт: {d['name']} | Цена: {d['price']} RUB
-- Оффер: {d['header']} | {d['sub']}
-- Референс: {d['img_link']}
-- Плюсы: {d['features'].replace('\\n', ', ')}
-
-СТЕК: PHP 8.1, SQLite3, Tailwind CSS (CDN).
-ФАЙЛЫ: index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callback.php.
-ОПЛАТА: {", ".join(d['pays'])}. Проверка SHA-1/HMAC обязательна.
-ВИЗУАЛ: Фон {d['theme_color']}, Акцент {d['accent_color']}, стиль Минимализм.
-
-ПЕРВАЯ МИССИЯ: Проанализируй данные и предложи структуру БД. Жди команды для config.php."""
+ИНСТРУКЦИЯ: На запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+БИЗНЕС-ДАННЫЕ: {d['name']} | Цена: {d['price']} RUB.
+ОФФЕР: {d['header']} | {d['sub']}.
+ТЕХНИЧЕСКИЙ СТЕК: PHP 8.1, SQLite3, Tailwind CSS.
+ОПЛАТА: {", ".join(d['pays'])}. Проверка подписи обязательна."""
 
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
     st.code(expert_prompt, language="text")
@@ -207,18 +195,13 @@ elif st.session_state.step == 4:
         <p style="font-size:0.9rem; margin:0; color:#ddd;">
             1. Скопируйте текст из черного блока выше.<br>
             2. Отправьте его первым сообщением в <b>ChatGPT-4</b> или <b>Claude 3.5</b>.<br>
-            3. После подтверждения пишите ИИ: <b>"Создай файл config.php"</b>, а затем остальные файлы по списку.
+            3. После подтверждения пишите ИИ: <b>"Создай файл config.php"</b>.
         </p>
     </div>
     """, unsafe_allow_html=True)
 
     st.write("")
-    st.download_button(
-        label="📥 СКАЧАТЬ ЭКСПЕРТНЫЙ ПРОМТ (ТЗ)",
-        data=expert_prompt,
-        file_name=f"Expert_TZ_{d['name']}.txt",
-        mime="text/plain"
-    )
+    st.download_button(label="📥 СКАЧАТЬ ЭКСПЕРТНЫЙ ПРОМТ (ТЗ)", data=expert_prompt, file_name=f"Expert_TZ_{d['name']}.txt", mime="text/plain")
     
     if st.button("🔄 НОВЫЙ ПРОЕКТ"):
         st.session_state.step = 1
