@@ -1,113 +1,53 @@
 import streamlit as st
-from collections import Counter
-import re
 
-# 1. КОНФИГУРАЦИЯ СТРАНИЦЫ
+# 1. КОНФИГУРАЦИЯ
 st.set_page_config(page_title="AI TZ Premium", page_icon="🔮", layout="centered")
 
-# 2. КРУТОЙ ДИЗАЙН (CSS)
+# 2. ДИЗАЙН (Улучшенный черный + Центрирование)
 st.markdown("""
     <style>
-    /* Глубокий черный фон для всего приложения */
-    .stApp {
-        background-color: #000000;
-        color: #ffffff;
-    }
-    
-    /* Стилизация центрального заголовка */
+    .stApp { background-color: #000000; color: #ffffff; }
     .main-title {
         text-align: center;
-        font-family: 'Exo 2', sans-serif;
         background: linear-gradient(90deg, #00f2ea, #00ff41);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: 3rem;
-        font-weight: 800;
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 15px;
+        font-size: 3rem; font-weight: 800; margin-bottom: 0px;
     }
+    .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
     
-    .subtitle {
-        text-align: center;
-        color: #888;
-        font-size: 1.1rem;
-        margin-bottom: 40px;
-    }
-
-    /* Оформление рамок для полей ввода */
-    div[data-baseweb="input"], div[data-baseweb="textarea"] {
+    /* Стилизация рамок */
+    div[data-baseweb="input"], div[data-baseweb="textarea"], div[data-baseweb="select"] {
         border: 1px solid #1e1e1e !important;
         border-radius: 12px !important;
         background-color: #0a0a0a !important;
-        transition: all 0.3s ease;
     }
     
-    div[data-baseweb="input"]:focus-within, div[data-baseweb="textarea"]:focus-within {
-        border: 1px solid #00f2ea !important;
-        box-shadow: 0 0 15px rgba(0, 242, 234, 0.2);
-    }
-
-    /* Красивые карточки шагов */
-    .step-container {
-        display: flex;
-        justify-content: space-around;
-        margin-bottom: 30px;
-    }
+    .step-node { text-align: center; padding: 10px; border-bottom: 2px solid #1e1e1e; flex-grow: 1; color: #444; font-weight: bold; }
+    .step-node-active { color: #00f2ea; border-bottom: 2px solid #00f2ea; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
     
-    .step-node {
-        text-align: center;
-        padding: 10px;
-        border-bottom: 2px solid #1e1e1e;
-        flex-grow: 1;
-        color: #444;
-        font-weight: bold;
-    }
-    
-    .step-node-active {
-        color: #00f2ea;
-        border-bottom: 2px solid #00f2ea;
-        text-shadow: 0 0 10px rgba(0, 242, 234, 0.5);
-    }
-
-    /* Кнопки в стиле киберпанк */
     .stButton > button {
         background: linear-gradient(135deg, #00f2ea 0%, #0072ff 100%) !important;
-        color: white !important;
-        border: none !important;
-        border-radius: 8px !important;
-        padding: 12px 24px !important;
-        font-weight: bold !important;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: transform 0.2s, box-shadow 0.2s !important;
+        color: white !important; border: none !important; width: 100%; border-radius: 8px !important;
+        height: 50px; font-weight: bold !important; text-transform: uppercase;
     }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(0, 242, 234, 0.4) !important;
-    }
-    
-    /* Убираем стандартные рамки Streamlit */
-    header {visibility: hidden;}
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ЛОГИКА ШАГОВ
-if 'step' not in st.session_state:
-    st.session_state.step = 1
+# 3. ИНИЦИАЛИЗАЦИЯ ДАННЫХ (Чтобы не было ошибок NameError)
+if 'step' not in st.session_state: st.session_state.step = 1
+if 'data' not in st.session_state:
+    st.session_state.data = {
+        "name": "", "desc": "", "aud": "", "theme": "Deep Black", 
+        "style": "Минимализм", "pays": [], "security": False
+    }
 
 def next_step(): st.session_state.step += 1
 def prev_step(): st.session_state.step -= 1
 
-# --- ШАПКА ---
-st.markdown('<div class="main-title">🔮 AI ГЕНЕРАТОР ТЗ</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Интеллектуальная система проектирования цифровых продуктов</div>', unsafe_allow_html=True)
+# --- ЗАГОЛОВОК ---
+st.markdown('<div class="main-title">AI ГЕНЕРАТОР ТЗ</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Создание системных инструкций для разработки</div>', unsafe_allow_html=True)
 
 # --- ИНДИКАТОР ШАГОВ ---
 step_cols = st.columns(4)
@@ -116,92 +56,79 @@ for i, name in enumerate(names):
     is_active = "step-node-active" if st.session_state.step == i + 1 else ""
     step_cols[i].markdown(f'<div class="step-node {is_active}">{i+1}. {name}</div>', unsafe_allow_html=True)
 
-st.write("") # Отступ
+st.write("") 
 
 # --- ШАГ 1: ПРОДУКТ ---
 if st.session_state.step == 1:
-    st.markdown("### 🛠 Основная информация")
-    with st.container():
-        shop_name = st.text_input("Название вашего проекта", placeholder="Например: CyberStore X")
-        description = st.text_area("Детальное описание продукта", placeholder="Опишите, что именно вы предлагаете...", height=150)
-        audience = st.text_input("Целевая аудитория", placeholder="Кто ваши клиенты?")
-        
-    if st.button("Далее: Визуальный стиль →"):
-        if shop_name and description:
-            st.session_state.shop_name = shop_name
-            st.session_state.description = description
-            st.session_state.audience = audience
+    st.markdown("### 🛠 Информация о проекте")
+    st.session_state.data["name"] = st.text_input("Название магазина", value=st.session_state.data["name"], placeholder="Например: Digital Pro Store")
+    st.session_state.data["desc"] = st.text_area("Что продаёшь (подробно)", value=st.session_state.data["desc"], placeholder="Опиши продукт, какие проблемы он решает...", height=150)
+    st.session_state.data["aud"] = st.text_input("Целевая аудитория", value=st.session_state.data["aud"], placeholder="Например: владельцы малого бизнеса")
+    
+    if st.button("Далее: Внешний вид →"):
+        if st.session_state.data["name"] and st.session_state.data["desc"]:
             next_step()
             st.rerun()
-        else:
-            st.error("Пожалуйста, заполните название и описание.")
+        else: st.error("Заполни название и описание!")
 
 # --- ШАГ 2: ВИЗУАЛ ---
 elif st.session_state.step == 2:
-    st.markdown("### 🎨 Эстетика и Интерфейс")
-    theme = st.select_slider("Цветовая палитра", options=["Deep Black", "Cyber Blue", "Neon Green", "Royal Gold"])
-    ui_style = st.radio("Стиль UI", ["Минимализм", "Футуризм", "Классика", "Яркий акцент"], horizontal=True)
+    st.markdown("### 🎨 Дизайн и Атмосфера")
+    st.session_state.data["theme"] = st.select_slider("Цветовая палитра", options=["Deep Black", "Cyber Blue", "Neon Green", "Royal Gold"], value=st.session_state.data["theme"])
+    st.session_state.data["style"] = st.radio("Стиль оформления", ["Минимализм", "Футуризм", "Классика", "Яркий"], horizontal=True, index=["Минимализм", "Футуризм", "Классика", "Яркий"].index(st.session_state.data["style"]))
     
-    col_nav = st.columns([1,1])
-    with col_nav[0]: 
-        if st.button("← Назад"): 
-            prev_step()
-            st.rerun()
-    with col_nav[1]: 
-        if st.button("Далее: Технологии →"):
-            st.session_state.theme = theme
-            st.session_state.ui_style = ui_style
-            next_step()
-            st.rerun()
+    c1, c2 = st.columns(2)
+    with c1: 
+        if st.button("← Назад"): prev_step(); st.rerun()
+    with c2: 
+        if st.button("Далее: Оплата →"): next_step(); st.rerun()
 
-# --- ШАГ 3: ТЕХНОЛОГИИ (ОПЛАТА) ---
+# --- ШАГ 3: ОПЛАТА ---
 elif st.session_state.step == 3:
-    st.markdown("### ⚙️ Интеграции и Оплата")
-    pays = st.multiselect("Платежные шлюзы", ["Crypto Pay", "Stripe", "ЮMoney", "Банковские карты"])
-    security = st.checkbox("Нужна повышенная защита данных (SSL/Encryption)")
+    st.markdown("### ⚙️ Платежные системы")
+    st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", ["ЮMoney", "Криптовалюта", "Карты РФ", "PayPal"], default=st.session_state.data["pays"])
+    st.session_state.data["security"] = st.checkbox("Повышенная безопасность (SSL/Шифрование)", value=st.session_state.data["security"])
     
-    col_nav = st.columns([1,1])
-    with col_nav[0]: 
-        if st.button("← Назад"): 
-            prev_step()
-            st.rerun()
-    with col_nav[1]: 
-        if st.button("🔮 Сгенерировать финальное ТЗ"):
-            st.session_state.pays = pays
-            next_step()
-            st.rerun()
+    c1, c2 = st.columns(2)
+    with c1: 
+        if st.button("← Назад"): prev_step(); st.rerun()
+    with c2: 
+        if st.button("🔮 Сгенерировать промт"): next_step(); st.rerun()
 
-# --- ШАГ 4: РЕЗУЛЬТАТ ---
+# --- ШАГ 4: РЕЗУЛЬТАТ (Тот самый "Промт как у Орфеева") ---
 elif st.session_state.step == 4:
-    st.markdown("### ✨ Ваше идеальное ТЗ сформировано")
+    st.markdown("### ✨ Ваше системное ТЗ готово!")
     
-    final_output = f"""## 🧠 ТЕХНИЧЕСКОЕ ЗАДАНИЕ: {st.session_state.shop_name.upper()}
+    # ВОТ ЗДЕСЬ ЗАШИТ ШАБЛОН (ПРОМТ)
+    system_prompt = f"""Ты — senior full-stack разработчик с огромным опытом в e-commerce.
 
-### 📌 ПРОДУКТ
-- **Описание:** {st.session_state.description}
-- **Аудитория:** {st.session_state.audience}
+## ЗАДАЧА
+Создать профессиональный онлайн-магазин цифровых товаров. 
+Название проекта: {st.session_state.data['name']}
 
-### 🎨 ДИЗАЙН-КОНЦЕПЦИЯ
-- **Цветовое решение:** {st.session_state.theme}
-- **Стиль интерфейса:** {st.session_state.ui_style}
+## ОПИСАНИЕ ПРОДУКТА
+{st.session_state.data['desc']}
+Целевая аудитория: {st.session_state.data['aud']}
 
-### 💳 ТЕХНИЧЕСКИЙ СТЕК
-- **Методы оплаты:** {", ".join(st.session_state.pays) if st.session_state.pays else "Не указано"}
-- **Безопасность:** {"Включена (High Priority)" if security else "Стандартная"}
+## ТЕХНИЧЕСКИЙ ДИЗАЙН
+- Цветовая схема: {st.session_state.data['theme']}
+- Визуальный стиль: {st.session_state.data['style']}
 
----
-*Сгенерировано в AI Premium TZ Tool*
-    """
-    
-    st.markdown('<div style="background-color: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid #00f2ea;">', unsafe_allow_html=True)
-    st.markdown(final_output)
+## ФУНКЦИОНАЛ
+- Интеграция платежей: {", ".join(st.session_state.data['pays']) if st.session_state.data['pays'] else "Стандартная"}
+- Безопасность: {"Высокий приоритет (Шифрование)" if st.session_state.data['security'] else "Базовая"}
+
+Твоя роль — выдавать только чистый код файлов по запросу, без лишних объяснений. Начнем с создания структуры базы данных. Жди моей команды."""
+
+    st.markdown('<div style="background-color: #0a0a0a; padding: 20px; border-radius: 12px; border: 1px solid #00f2ea;">', unsafe_allow_html=True)
+    st.markdown(f"```\n{system_prompt}\n```")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.download_button("📥 Скачать ТЗ в формате .txt", final_output)
-    
-    if st.button("🔄 Создать новое ТЗ"):
+    st.write("")
+    st.download_button("📥 Скачать файл промта", system_prompt)
+    if st.button("🔄 Начать заново"):
         st.session_state.step = 1
         st.rerun()
 
 st.write("---")
-st.caption("⚡ Premium AI System | 2024")
+st.caption("⚡ AI Premium System | Powered by Your Logic")
