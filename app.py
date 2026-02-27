@@ -1,30 +1,39 @@
 import streamlit as st
 
-# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНОЕ СКРЫТИЕ ВСЕГО ЛИШНЕГО
+# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНОЕ СКРЫТИЕ СЕРВИСНЫХ ЭЛЕМЕНТОВ
 st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* 1. ПОЛНАЯ ЗАЧИСТКА ИНТЕРФЕЙСА STREAMLIT */
+    /* УЛЬТРА-ОЧИСТКА: Убираем всё, что связано со Streamlit */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
+    [data-testid="stHeader"] {display:none;}
+    [data-testid="stFooter"] {display:none;}
+    [data-testid="stStatusWidget"] {display:none;}
     
-    /* Агрессивное удаление красной кнопки (короны) и надписи Hosted with Streamlit */
+    /* ЦЕЛЕВОЕ УДАЛЕНИЕ КРАСНОЙ КНОПКИ (КОРОНЫ) */
     div[class^="viewerBadge"], 
     div[class*="viewerBadge"], 
-    div[data-testid="stStatusWidget"], 
+    div[data-testid="stNotification"],
+    div[class^="StyledLinkIcon"],
     a[href*="streamlit.io"] {
         display: none !important;
         visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
         height: 0 !important;
         width: 0 !important;
     }
-
-    /* 2. ГЛАВНЫЙ СТИЛЬ ПРИЛОЖЕНИЯ */
+    
+    /* Блокировка нижнего края страницы от мусора */
+    .stApp > footer { display: none !important; }
+    
+    /* 2. ПРЕМИАЛЬНЫЙ ДИЗАЙН САЙТА */
     .stApp { 
         background-color: #000000 !important; 
         color: #ffffff; 
@@ -51,14 +60,14 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
-    /* Стили полей ввода */
+    /* Рамки полей ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
         border: 1px solid #1a1a1a !important;
         border-radius: 16px !important;
         background-color: #050505 !important;
     }
-    
-    /* Неоновые кнопки */
+
+    /* Кнопки перехода (градиент и свечение) */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: white !important;
@@ -70,8 +79,12 @@ st.markdown("""
         text-transform: uppercase;
         box-shadow: 0 4px 15px rgba(0, 242, 234, 0.2);
     }
-    
-    /* Кнопка СКАЧАТЬ (Белая на черном) */
+    .stButton > button:hover {
+        box-shadow: 0 8px 30px rgba(0, 242, 234, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* Кнопка СКАЧАТЬ (Белый премиум) */
     .stDownloadButton > button {
         background: #ffffff !important;
         color: #000000 !important;
@@ -106,7 +119,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. ЛОГИКА СОСТОЯНИЯ
+# 2. СОХРАНЕНИЕ ДАННЫХ
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
@@ -119,11 +132,11 @@ if 'data' not in st.session_state:
 def next_step(): st.session_state.step += 1
 def prev_step(): st.session_state.step -= 1
 
-# --- ВИЗУАЛЬНАЯ ЧАСТЬ ---
+# --- ШАПКА САЙТА ---
 st.markdown('<div class="main-title">AI ARCHITECT PRO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Enterprise Level Generation System</div>', unsafe_allow_html=True)
 
-# ШАГ 1
+# --- ШАГ 1: КОНТЕКСТ ---
 if st.session_state.step == 1:
     st.markdown("### 💎 01. Контекст продукта")
     st.session_state.data["name"] = st.text_input("Название проекта/бренда", value=st.session_state.data["name"])
@@ -135,13 +148,13 @@ if st.session_state.step == 1:
     st.session_state.data["price"] = st.text_input("Цена товара (в рублях)", value=st.session_state.data["price"])
     
     st.write("")
-    if st.button("ПЕРЕЙТИ К НАСТРОЙКАМ ДИЗАЙНА →"):
+    if st.button("ПЕРЕЙТИ К ТЕХНИЧЕСКИМ НАСТРОЙКАМ →"):
         if st.session_state.data["name"] and st.session_state.data["header"]:
             next_step()
             st.rerun()
         else: st.error("Заполните обязательные поля!")
 
-# ШАГ 2
+# --- ШАГ 2: ВИЗУАЛ ---
 elif st.session_state.step == 2:
     st.markdown("### 🎨 02. Визуальная стратегия")
     col1, col2 = st.columns(2)
@@ -157,7 +170,7 @@ elif st.session_state.step == 2:
     if c1.button("← НАЗАД"): prev_step(); st.rerun()
     if c2.button("К ВЫБОРУ ОПЛАТЫ →"): next_step(); st.rerun()
 
-# ШАГ 3
+# --- ШАГ 3: ОПЛАТА ---
 elif st.session_state.step == 3:
     st.markdown("### 💳 03. Платёжные шлюзы")
     st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", 
@@ -168,38 +181,38 @@ elif st.session_state.step == 3:
     if c1.button("← НАЗАД"): prev_step(); st.rerun()
     if c2.button("⚡ СФОРМИРОВАТЬ ЭКСПЕРТНЫЙ ПРОМТ"): next_step(); st.rerun()
 
-# ШАГ 4
+# --- ШАГ 4: РЕЗУЛЬТАТ (ПРОМТ) ---
 elif st.session_state.step == 4:
     st.markdown("### 🚀 ВАША СИСТЕМНАЯ ИНСТРУКЦИЯ ГОТОВА")
     
     d = st.session_state.data
     
-    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки.
+    # ЭКСПЕРТНЫЙ ПРОМТ-АРХИТЕКТОР
+    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом. 
 
-ЗАДАЧА
-Создать высококонверсионный, безопасный онлайн-магазин "{d['name']}". 
-Работай в режиме пошаговой выдачи файлов. На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+ЗАДАЧА: Спроектировать высококонверсионный магазин "{d['name']}". 
+ИНСТРУКЦИЯ: На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
 
-ДАННЫЕ ПРОЕКТА
-- Название: {d['name']} | Цена: {d['price']} RUB
-- H1: {d['header']} | Sub: {d['sub']}
+ДАННЫЕ ПРОЕКТА:
+- Бренд: {d['name']} | Цена: {d['price']} RUB
+- Контент: {d['header']} / {d['sub']}
 - Референс: {d['img_link'] if d['img_link'] else 'standard_placeholder.jpg'}
-- Преимущества: {d['features'].replace('\\n', ', ')}
+- Особенности: {d['features'].replace('\\n', ', ')}
 
-ТЕХНИЧЕСКИЙ СТЕК
-PHP 8.1+, SQLite3, Tailwind CSS (CDN), Mobile-first.
+ТЕХНИЧЕСКИЙ СТЕК:
+PHP 8.1+, SQLite3, Tailwind CSS (CDN), Mobile-first архитектура.
 
-СТРУКТУРА ФАЙЛОВ
+ФАЙЛЫ:
 index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callback.php.
 
-ПЛАТЕЖИ
-Интегрировать: {", ".join(d['pays'])}. Обязательна проверка контрольных подписей (SHA-1/HMAC).
+ПЛАТЕЖИ:
+Интегрировать: {", ".join(d['pays'])}. Проверка SHA-1/HMAC подписей обязательна.
 
-ДИЗАЙН
+ДИЗАЙН:
 Фон: {d['theme_color']} | Акцент: {d['accent_color']} | Стиль: Премиальный минимализм.
 
-ПЕРВАЯ МИССИЯ
-Проанализируй вводные данные. Предложи структуру БД и архитектуру. Жди моей команды для кода config.php."""
+ПЕРВАЯ МИССИЯ:
+Проанализируй вводные. Предложи структуру БД. Жди моей команды для кода config.php."""
 
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
     st.code(expert_prompt, language="text")
