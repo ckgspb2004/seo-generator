@@ -1,7 +1,7 @@
 import streamlit as st
 
 # 1. КОНФИГУРАЦИЯ И УЛЬТРА-ДИЗАЙН
-st.set_page_config(page_title="AI Architecture PRO", page_icon="💎", layout="centered")
+st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
 st.markdown("""
     <style>
@@ -42,7 +42,7 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(0, 242, 234, 0.1);
     }
 
-    /* Подсвеченные кнопки */
+    /* Кнопки навигации */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: white !important;
@@ -54,56 +54,55 @@ st.markdown("""
         font-size: 1.1rem !important;
         text-transform: uppercase;
         letter-spacing: 1px;
-        cursor: pointer;
         transition: 0.4s;
-        box-shadow: 0 4px 15px rgba(0, 242, 234, 0.3);
     }
     .stButton > button:hover {
         transform: translateY(-3px);
         box-shadow: 0 8px 30px rgba(0, 242, 234, 0.6);
-        filter: brightness(1.1);
     }
 
-    /* Кнопка скачивания (особенная) */
-    .download-btn {
-        display: inline-block;
-        padding: 20px 40px;
-        background: #ffffff;
+    /* Кнопка СКАЧАТЬ (Исправленная видимость текста) */
+    .stDownloadButton > button {
+        background: #ffffff !important;
         color: #000000 !important;
-        border-radius: 50px;
-        font-weight: 900;
-        text-decoration: none;
-        text-align: center;
-        margin-top: 20px;
-        border: 2px solid #00f2ea;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        border: 2px solid #00f2ea !important;
+        border-radius: 14px !important;
+        height: 70px !important;
+        width: 100% !important;
+        font-weight: 900 !important;
+        font-size: 1.2rem !important;
+        text-transform: uppercase !important;
+        margin-top: 20px !important;
+    }
+    .stDownloadButton > button:hover {
+        background: #00f2ea !important;
+        color: #000000 !important;
     }
 
     /* Контейнер результата */
     .result-container {
         background: #080808;
-        border: 1px solid #111;
+        border: 1px solid #1a1a1a;
         border-radius: 20px;
         padding: 30px;
         margin-top: 20px;
         line-height: 1.6;
     }
 
-    /* Прячем стандартные элементы */
     footer {visibility: hidden;}
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     </style>
     """, unsafe_allow_html=True)
 
-# 2. ЛОГИКА ШАГОВ
+# 2. ЛОГИКА
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
         "name": "", "price": "1000", "header": "", "sub": "", "desc": "", 
-        "features": "", "cta": "ПОЛУЧИТЬ ДОСТУП", "img": "", 
+        "features": "", "cta": "ПОЛУЧИТЬ ДОСТУП", "img_link": "", 
         "theme": "#000000", "accent": "#00f2ea", "admin_pass": "SecurePass99#",
-        "pays": ["ЮMoney"]
+        "pays": ["ЮMoney (API)"]
     }
 
 def next_step(): st.session_state.step += 1
@@ -111,15 +110,16 @@ def prev_step(): st.session_state.step -= 1
 
 # --- ШАПКА ---
 st.markdown('<div class="main-title">AI PRO GEN</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">System Architecture & Marketing Generator</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Система генерации экспертных инструкций</div>', unsafe_allow_html=True)
 
 # --- ШАГ 1: МАРКЕТИНГ ---
 if st.session_state.step == 1:
-    st.markdown("### 💎 01. Концепция и Продажи")
+    st.markdown("### 💎 01. Концепция и Контент")
     st.session_state.data["name"] = st.text_input("Название бренда/проекта", value=st.session_state.data["name"])
     st.session_state.data["header"] = st.text_input("Убойный заголовок (H1)", placeholder="Например: Твой бизнес на автопилоте")
-    st.session_state.data["sub"] = st.text_input("Подзаголовок (выгода)", placeholder="Сделаем всё за 24 часа с гарантией...")
+    st.session_state.data["sub"] = st.text_input("Подзаголовок", placeholder="Сделаем всё за 24 часа...")
     st.session_state.data["desc"] = st.text_area("Полное описание продукта", height=100)
+    st.session_state.data["img_link"] = st.text_input("Ссылка на картинку товара или референс", placeholder="https://site.ru/image.jpg")
     st.session_state.data["features"] = st.text_area("Список преимуществ (каждое с новой строки)")
     st.session_state.data["price"] = st.text_input("Стоимость (в рублях)", value=st.session_state.data["price"])
     
@@ -129,7 +129,7 @@ if st.session_state.step == 1:
             st.rerun()
         else: st.error("Заполните название и заголовок!")
 
-# --- ШАГ 2: ТЕХНИЧЕСКИЙ ВИЗУАЛ ---
+# --- ШАГ 2: ВИЗУАЛ ---
 elif st.session_state.step == 2:
     st.markdown("### 🎨 02. Визуальный код")
     col1, col2 = st.columns(2)
@@ -167,77 +167,55 @@ elif st.session_state.step == 4:
     
     d = st.session_state.data
     
-    # ФОРМИРУЕМ МОЩНЫЙ ПРОМТ
-    expert_prompt = f"""Ты — Senior Full-Stack разработчик и Архитектор систем. Твоя специализация — высоконагруженные e-commerce проекты.
+    expert_prompt = f"""Ты — Senior Full-Stack разработчик и Архитектор систем.
 
 ЗАДАЧА
-Спроектировать и написать код для онлайн-магазина "{d['name']}". 
-Работай в режиме пошаговой выдачи файлов. На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый, оптимизированный код без лишних пояснений.
+Спроектировать магазин "{d['name']}". 
+На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
 
 ДАННЫЕ ПРОЕКТА
 - Бренд: {d['name']}
 - Цена товара: {d['price']} RUB
 
-МАРКЕТИНГОВАЯ СТРУКТУРА
+МАРКЕТИНГ
 Заголовок: {d['header']}
 Подзаголовок: {d['sub']}
 Описание: {d['desc']}
+Изображение: {d['img_link'] if d['img_link'] else 'standard_placeholder.jpg'}
 Преимущества:
 {chr(10).join([f'- {line}' for line in d['features'].splitlines()])}
-CTA кнопка: {d['cta']}
 
 ТЕХНИЧЕСКИЙ СТЕК
-- Язык: PHP 8.1+ (Native)
-- База данных: SQLite3 (автоматическое создание таблиц)
-- Стили: Tailwind CSS via CDN
-- Верстка: Адаптивная, Mobile-first
+- PHP 8.1+, SQLite3, Tailwind CSS, Mobile-first.
 
-АРХИТЕКТУРА ФАЙЛОВ
-1. index.php — Лендинг с высокой конверсией
-2. thank_you.php — Страница выдачи товара
-3. admin.php — Панель управления (доступ: {d['admin_pass']})
-4. config.php — Конфиг (БД, ключи, настройки)
-5. callback.php — Обработчик платежей ({", ".join(d['pays'])})
-
-ЛОГИКА ОПЛАТЫ И БЕЗОПАСНОСТИ
-- Реализовать строгую проверку контрольной подписи (SHA-1/HMAC) для входящих уведомлений.
-- Использовать подготовленные выражения SQL для защиты от инъекций.
-- Все ключи и пароли хранить исключительно в config.php.
+ФАЙЛЫ
+index.php, thank_you.php, admin.php (пароль: {d['admin_pass']}), config.php, callback.php.
 
 ДИЗАЙН
-Фон: {d['theme']}
-Акцент: {d['accent']}
-Стиль: Премиальный минимализм, четкая типографика, плавные тени.
-
-ОГРАНИЧЕНИЯ
-- Никаких внешних зависимостей (composer не использовать).
-- Код должен работать "из коробки" на любом shared-хостинге (Beget/Reg.ru).
+Фон: {d['theme']} | Акцент: {d['accent']} | Стиль: Премиальный минимализм.
 """
 
     st.markdown('<div class="result-container">', unsafe_allow_html=True)
     st.code(expert_prompt, language="text")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ИНСТРУКЦИЯ
     st.info("""
-    👉 **ЧТО ДЕЛАТЬ ДАЛЬШЕ?**
-    1. Скопируйте текст выше (иконка в углу рамки).
-    2. Зайдите в **ChatGPT (версия GPT-4)** или **Claude 3.5 Sonnet**.
-    3. Вставьте этот текст первым сообщением.
-    4. Когда нейросеть подтвердит готовность, пишите ей: **"Создай config.php"**, а затем по очереди остальные файлы.
+    👉 **ИНСТРУКЦИЯ:**
+    1. Скопируйте текст выше.
+    2. Вставьте в ChatGPT-4 или Claude 3.5.
+    3. Пишите нейросети: **"Создай config.php"**, а затем остальные файлы.
     """)
 
-    # КНОПКА СКАЧИВАНИЯ
+    # КНОПКА СКАЧИВАНИЯ С ВИДИМЫМ ТЕКСТОМ
     st.download_button(
-        label="📥 СКАЧАТЬ ТЗ ФАЙЛОМ",
+        label="📥 СКАЧАТЬ ГОТОВОЕ ТЗ (ПРОМТ)",
         data=expert_prompt,
-        file_name=f"TZ_{d['name']}.txt",
-        mime="text/plain",
-        help="Нажмите, чтобы сохранить ТЗ на компьютер"
+        file_name=f"PRO_TZ_{d['name']}.txt",
+        mime="text/plain"
     )
     
-    if st.button("🔄 НОВЫЙ ПРОЕКТ"):
+    if st.button("🔄 СОЗДАТЬ НОВЫЙ ПРОЕКТ"):
         st.session_state.step = 1
         st.rerun()
 
-st.markdown("<br><center style='color: #222;'>💎 PREMIUM AI SYSTEM 2024</center>", unsafe_allow_html=True)
+st.markdown("<br><center style='color: #444;'>💎 PREMIUM AI SYSTEM 2026</center>", unsafe_allow_html=True)
