@@ -53,11 +53,11 @@
         .result-box {
             background: #000; border: 1px solid #222; border-left: 4px solid #00f2ea;
             padding: 20px; font-family: 'Courier New', monospace; color: #ccc;
-            white-space: pre-wrap; word-break: break-all; margin-top: 20px;
+            white-space: pre-wrap; word-break: break-all; margin-top: 20px; font-size: 13px;
         }
-        .instruction {
-            background: rgba(0, 242, 234, 0.05); border: 1px solid rgba(0, 242, 234, 0.2);
-            padding: 20px; border-radius: 15px; margin-top: 25px;
+        .instruction-box {
+            background: #0a0a0a; border: 1px solid #1ed760;
+            padding: 25px; border-radius: 20px; margin-top: 30px;
         }
         .hidden { display: none; }
     </style>
@@ -68,7 +68,7 @@
         <!-- HEADER -->
         <div class="logo-icon">Г</div>
         <h1 class="text-center text-4xl md:text-5xl font-black neon-text mb-2">AI ARCHITECT PRO</h1>
-        <p class="text-center text-zinc-600 font-bold text-[10px] tracking-[0.3em] uppercase mb-10">Enterprise Generation System</p>
+        <p class="text-center text-zinc-600 font-bold text-[10px] tracking-[0.3em] uppercase mb-10">Premium Generation System 2026</p>
 
         <!-- STEPS NAV -->
         <div class="flex gap-2 mb-8">
@@ -80,63 +80,70 @@
 
         <!-- STEP 1 -->
         <div id="step1" class="glass-card">
-            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">01. Информация о продукте</h3>
+            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">01. Информация и Главный актив</h3>
             <div class="space-y-4">
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Название проекта</label><input id="name" type="text" placeholder="CyberStore X"></div>
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Заголовок H1</label><input id="header" type="text" placeholder="Убойный оффер..."></div>
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Описание сути</label><textarea id="desc" class="h-24" placeholder="Опишите продукт для ИИ..."></textarea></div>
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Ссылка на картинку/референс</label><input id="img" type="text" placeholder="https://..."></div>
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Цена (RUB)</label><input id="price" type="number" value="1000"></div>
-                <button onclick="showStep(2)" class="neon-button">Далее →</button>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Название проекта</label><input id="name" type="text" placeholder="AGEART (Гранит-Трейд)"></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Главный оффер (H1)</label><input id="header" type="text" placeholder="Керамическая плитка в СПб"></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Описание продукта</label><textarea id="desc" class="h-20" placeholder="Опишите, что именно продаем..."></textarea></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Ссылка на главное изображение товара</label><input id="img" type="text" placeholder="https://site.ru/image.jpg"></div>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Цена товара (RUB)</label><input id="price" type="number" value="1000"></div>
+                <button onclick="showStep(2)" class="neon-button">Далее к стилю →</button>
             </div>
         </div>
 
         <!-- STEP 2 -->
         <div id="step2" class="glass-card hidden">
-            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">02. Дизайн и Стиль</h3>
+            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">02. Дизайн и Доступ</h3>
             <div class="space-y-4">
                 <div class="flex gap-4">
-                    <div class="flex-1"><label class="text-[10px] text-zinc-500 font-bold uppercase">Фон</label><input id="colorBg" type="color" value="#000000" style="height: 50px;"></div>
-                    <div class="flex-1"><label class="text-[10px] text-zinc-500 font-bold uppercase">Кнопки</label><input id="colorBtn" type="color" value="#00f2ea" style="height: 50px;"></div>
+                    <div class="flex-1"><label class="text-[10px] text-zinc-500 font-bold uppercase">Цвет фона</label><input id="colorBg" type="color" value="#000000" style="height: 55px;"></div>
+                    <div class="flex-1"><label class="text-[10px] text-zinc-500 font-bold uppercase">Цвет кнопок</label><input id="colorBtn" type="color" value="#00f2ea" style="height: 55px;"></div>
                 </div>
-                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Пароль админа</label><input id="pass" type="text" value="AdminPass2026!"></div>
-                <button onclick="showStep(1)" class="w-full text-zinc-500 font-bold text-xs mb-2">← Назад</button>
-                <button onclick="showStep(3)" class="neon-button">Далее →</button>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Стиль интерфейса</label>
+                    <select id="ui_style">
+                        <option>Премиальный Минимализм</option>
+                        <option>Деловой (Строгий)</option>
+                        <option>Футуристичный Hi-Tech</option>
+                    </select>
+                </div>
+                <div><label class="text-[10px] text-zinc-500 font-bold uppercase">Мастер-пароль админа</label><input id="pass" type="text" value="SecureAdmin2026#"></div>
+                <button onclick="showStep(1)" class="w-full text-zinc-600 font-bold text-[10px] mt-4 uppercase">← Назад к продукту</button>
+                <button onclick="showStep(3)" class="neon-button">Далее к оплате →</button>
             </div>
         </div>
 
         <!-- STEP 3 -->
         <div id="step3" class="glass-card hidden">
-            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">03. Платежные шлюзы</h3>
+            <h3 class="text-lg font-bold text-cyan-400 mb-6 uppercase tracking-wider">03. Технические шлюзы</h3>
             <div class="space-y-3">
-                <label class="block p-4 border border-zinc-900 rounded-xl"><input type="checkbox" id="pay1" checked> <span class="ml-2">ЮMoney (Quickpay / SHA-1)</span></label>
-                <label class="block p-4 border border-zinc-900 rounded-xl"><input type="checkbox" id="pay2"> <span class="ml-2">NowPayments (Crypto / HMAC)</span></label>
-                <button onclick="showStep(2)" class="w-full text-zinc-500 font-bold text-xs mt-4 mb-2">← Назад</button>
-                <button onclick="finish()" class="neon-button">Создать промпт →</button>
+                <label class="block p-4 border border-zinc-900 rounded-xl bg-zinc-950"><input type="checkbox" id="pay1" checked> <span class="ml-2 font-bold">ЮMoney (Авто-платежи / SHA-1)</span></label>
+                <label class="block p-4 border border-zinc-900 rounded-xl bg-zinc-950"><input type="checkbox" id="pay2"> <span class="ml-2 font-bold">NowPayments (Крипто / HMAC)</span></label>
+                <button onclick="showStep(2)" class="w-full text-zinc-600 font-bold text-[10px] mt-4 uppercase">← Назад к визуалу</button>
+                <button onclick="finish()" class="neon-button">Сгенерировать ТЗ →</button>
             </div>
         </div>
 
         <!-- STEP 4 -->
         <div id="step4" class="glass-card hidden">
-            <h3 class="text-2xl font-black text-white mb-2 uppercase">🚀 Экспертное ТЗ готово</h3>
+            <h2 class="text-2xl font-black text-white mb-2 uppercase">🚀 Экспертный промпт готов</h2>
             <div id="result" class="result-box"></div>
             
-            <div class="instruction">
-                <h4 class="text-cyan-400 font-black text-sm mb-3 uppercase">📋 Инструкция по запуску:</h4>
-                <ul class="text-xs text-zinc-400 space-y-2 leading-relaxed">
-                    <li>1. Нажмите кнопку <b>"Скопировать"</b> ниже.</li>
-                    <li>2. Откройте <b>ChatGPT-4</b> или <b>Claude 3.5 Sonnet</b>.</li>
-                    <li>3. Вставьте этот текст первым сообщением. Это «обучит» ИИ проекту.</li>
-                    <li>4. Когда ИИ ответит, напишите ему: <b>"Создай файл config.php"</b>.</li>
-                    <li>5. Затем по очереди запрашивайте остальные файлы из списка.</li>
-                </ul>
+            <!-- ИНСТРУКЦИЯ ПОСЛЕ ИИ -->
+            <div class="instruction-box">
+                <h4 class="text-green-400 font-black text-sm mb-4 uppercase tracking-widest">✅ ШАГ 2: КАК СОЗДАТЬ САЙТ (ПОСЛЕ ИИ)</h4>
+                <div class="text-xs text-zinc-300 space-y-4 leading-relaxed">
+                    <p><b>1. Сборка кода:</b> Когда ChatGPT выдаст вам код файлов (index.php, config.php и др.), скопируйте их по одному в текстовый редактор (например, Блокнот) и сохраните с соответствующими названиями.</p>
+                    <p><b>2. Хостинг:</b> Зайдите на свой хостинг (например, Beget или Reg.ru). Перейдите в <b>"Менеджер файлов"</b> -> папка <b>public_html</b>.</p>
+                    <p><b>3. Загрузка:</b> Загрузите все созданные файлы в эту папку. Также создайте там папки <code>/goods/</code> (для файлов товара) и <code>/uploads/</code> (для картинок).</p>
+                    <p><b>4. Запуск:</b> Просто откройте ваш домен в браузере. Сайт автоматически создаст базу данных при первом посещении.</p>
+                </div>
             </div>
 
-            <button id="copyBtn" onclick="copyResult()" class="neon-button !bg-white !text-black">Скопировать промпт</button>
-            <button onclick="location.reload()" class="w-full py-4 text-zinc-700 text-[10px] font-black uppercase">🔄 Новый проект</button>
+            <button id="copyBtn" onclick="copyResult()" class="neon-button !bg-white !text-black text-xl">СКОПИРОВАТЬ ТЗ ДЛЯ ИИ</button>
+            <button onclick="location.reload()" class="w-full py-4 text-zinc-800 text-[10px] font-black uppercase tracking-widest">🔄 Новый проект</button>
         </div>
 
-        <p class="text-center text-zinc-800 text-[10px] font-black uppercase tracking-[0.4em] mt-10 mb-20">© 2026 PREMIUM AI ARCHITECT SYSTEM</p>
+        <p class="text-center text-zinc-800 text-[10px] font-black uppercase tracking-[0.4em] mt-10 mb-20">💎 PREMIUM AI ARCHITECT SYSTEM | v.4.8 | 2026</p>
     </div>
 
     <script>
@@ -149,7 +156,7 @@
         }
 
         function finish() {
-            const data = {
+            const d = {
                 name: document.getElementById('name').value,
                 header: document.getElementById('header').value,
                 desc: document.getElementById('desc').value,
@@ -157,23 +164,35 @@
                 img: document.getElementById('img').value,
                 bg: document.getElementById('colorBg').value,
                 btn: document.getElementById('colorBtn').value,
+                ui: document.getElementById('ui_style').value,
                 pass: document.getElementById('pass').value
             };
 
-            const prompt = `Ты — Senior Full-Stack Architect и CTO с 15-летним опытом.
-ЗАДАЧА: Спроектировать высококонверсионный магазин "${data.name}".
-ИНСТРУКЦИЯ: На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+            const prompt = `Ты — Senior Full-Stack Architect и CTO. Твоя цель — безупречный код.
+
+ЗАДАЧА: Спроектировать магазин "${d.name}". 
+ПРАВИЛО: На запрос "создай [файл]" выдавай ТОЛЬКО чистый код файла без лишних слов.
 
 ДАННЫЕ ПРОЕКТА:
-- Бренд: ${data.name} | Цена: ${data.price} RUB
-- H1: ${data.header} | Описание: ${data.desc}
-- Картинка: ${data.img || 'standard.jpg'}
-- Стек: PHP 8.1, SQLite3, Tailwind CSS.
-- Пароль админа: ${data.pass}
-- Дизайн: Фон ${data.bg}, Акцент ${data.btn}.
+- Название: ${d.name} | Цена: ${d.price} RUB
+- Главный оффер: ${d.header}
+- Описание продукта: ${d.desc}
+- ГЛАВНОЕ ИЗОБРАЖЕНИЕ (вставить в шапку): ${d.img || 'https://placehold.co/600x400'}
 
-ФАЙЛЫ: index.php, config.php, admin.php, thank_you.php, callback.php.
-ПЕРВАЯ МИССИЯ: Предложи структуру БД. Жди команды для config.php.`;
+ТЕХНИЧЕСКИЙ СТЕК:
+PHP 8.1+, SQLite3 (авто-инициализация), Tailwind CSS (CDN), Mobile-first.
+
+ФАЙЛОВАЯ СТРУКТУРА:
+1. index.php (Лендинг с картинкой и кнопкой оплаты)
+2. config.php (Конфиг, ключи и пароль: ${d.pass})
+3. admin.php (Панель заказов и настроек)
+4. thank_you.php (Страница выдачи товара после оплаты)
+5. callback.php (Обработчик платежей с проверкой подписи)
+
+ДИЗАЙН-КОД:
+Фон: ${d.bg} | Акцент кнопок: ${d.btn} | Стиль: ${d.ui}
+
+ПЕРВОЕ ЗАДАНИЕ: Предложи структуру базы данных SQLite3 и логику взаимодействия файлов. Жди моей команды для кода config.php.`;
 
             document.getElementById('result').innerText = prompt;
             showStep(4);
@@ -183,8 +202,12 @@
             const text = document.getElementById('result').innerText;
             navigator.clipboard.writeText(text);
             const btn = document.getElementById('copyBtn');
-            btn.innerText = "СКОПИРОВАНО!";
-            setTimeout(() => btn.innerText = "СКОПИРОВАТЬ ПРОМПТ", 2000);
+            btn.innerText = "ГОТОВО! ВСТАВЛЯЙТЕ В CHATGPT";
+            btn.style.background = "#00ff41";
+            setTimeout(() => {
+                btn.innerText = "СКОПИРОВАТЬ ТЗ ДЛЯ ИИ";
+                btn.style.background = "#ffffff";
+            }, 2500);
         }
     </script>
 </body>
