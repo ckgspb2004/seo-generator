@@ -1,24 +1,35 @@
 import streamlit as st
 
-# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНАЯ ОЧИСТКА ИНТЕРФЕЙСА
+# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНОЕ СКРЫТИЕ ВСЕГО ЛИШНЕГО
 st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* 1. ПОЛНОЕ УДАЛЕНИЕ СЛУЖЕБНЫХ ЭЛЕМЕНТОВ STREAMLIT */
+    /* 1. ПОЛНАЯ ЗАЧИСТКА ИНТЕРФЕЙСА STREAMLIT */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     .stDeployButton {display:none;}
-    [data-testid="stStatusWidget"] {display:none;}
-    /* Убираем кнопку хостинга в правом нижнем углу */
-    .viewerBadge_container__1QSob {display: none !important;}
-    .viewerBadge_link__1S137 {display: none !important;}
     
-    /* 2. ГЛАВНЫЙ СТИЛЬ */
-    .stApp { background-color: #000000; color: #ffffff; font-family: 'Inter', sans-serif; }
+    /* Агрессивное удаление красной кнопки (короны) и надписи Hosted with Streamlit */
+    div[class^="viewerBadge"], 
+    div[class*="viewerBadge"], 
+    div[data-testid="stStatusWidget"], 
+    a[href*="streamlit.io"] {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+    }
+
+    /* 2. ГЛАВНЫЙ СТИЛЬ ПРИЛОЖЕНИЯ */
+    .stApp { 
+        background-color: #000000 !important; 
+        color: #ffffff; 
+        font-family: 'Inter', sans-serif; 
+    }
     
     .main-title {
         text-align: center;
@@ -40,13 +51,14 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
+    /* Стили полей ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
         border: 1px solid #1a1a1a !important;
         border-radius: 16px !important;
         background-color: #050505 !important;
     }
     
-    /* Кнопки навигации */
+    /* Неоновые кнопки */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: white !important;
@@ -55,12 +67,11 @@ st.markdown("""
         height: 60px;
         width: 100%;
         font-weight: 900 !important;
-        font-size: 1.1rem !important;
         text-transform: uppercase;
         box-shadow: 0 4px 15px rgba(0, 242, 234, 0.2);
     }
     
-    /* Кнопка СКАЧАТЬ (Яркая и заметная) */
+    /* Кнопка СКАЧАТЬ (Белая на черном) */
     .stDownloadButton > button {
         background: #ffffff !important;
         color: #000000 !important;
@@ -71,7 +82,7 @@ st.markdown("""
         font-weight: 900 !important;
         font-size: 1.3rem !important;
         text-transform: uppercase !important;
-        box-shadow: 0 0 25px rgba(0, 242, 234, 0.4) !important;
+        box-shadow: 0 0 25px rgba(0, 242, 234, 0.3) !important;
     }
 
     .result-box {
@@ -95,7 +106,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. ЛОГИКА
+# 2. ЛОГИКА СОСТОЯНИЯ
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
@@ -108,13 +119,13 @@ if 'data' not in st.session_state:
 def next_step(): st.session_state.step += 1
 def prev_step(): st.session_state.step -= 1
 
-# --- ШАПКА ---
+# --- ВИЗУАЛЬНАЯ ЧАСТЬ ---
 st.markdown('<div class="main-title">AI ARCHITECT PRO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Enterprise Level Generation System</div>', unsafe_allow_html=True)
 
-# --- ШАГ 1: БИЗНЕС ---
+# ШАГ 1
 if st.session_state.step == 1:
-    st.markdown("### 💎 01. Информация о продукте")
+    st.markdown("### 💎 01. Контекст продукта")
     st.session_state.data["name"] = st.text_input("Название проекта/бренда", value=st.session_state.data["name"])
     st.session_state.data["header"] = st.text_input("Главный оффер (Заголовок H1)", value=st.session_state.data["header"])
     st.session_state.data["sub"] = st.text_input("Подзаголовок (УТП)", value=st.session_state.data["sub"])
@@ -124,13 +135,13 @@ if st.session_state.step == 1:
     st.session_state.data["price"] = st.text_input("Цена товара (в рублях)", value=st.session_state.data["price"])
     
     st.write("")
-    if st.button("ПЕРЕЙТИ К ТЕХНИЧЕСКИМ НАСТРОЙКАМ →"):
+    if st.button("ПЕРЕЙТИ К НАСТРОЙКАМ ДИЗАЙНА →"):
         if st.session_state.data["name"] and st.session_state.data["header"]:
             next_step()
             st.rerun()
         else: st.error("Заполните обязательные поля!")
 
-# --- ШАГ 2: ВИЗУАЛ ---
+# ШАГ 2
 elif st.session_state.step == 2:
     st.markdown("### 🎨 02. Визуальная стратегия")
     col1, col2 = st.columns(2)
@@ -139,16 +150,14 @@ elif st.session_state.step == 2:
     with col2:
         st.session_state.data["accent_color"] = st.color_picker("Цвет кнопок", value=st.session_state.data["accent_color"])
     
-    st.session_state.data["admin_pass"] = st.text_input("Пароль администратора", value=st.session_state.data["admin_pass"])
+    st.session_state.data["admin_pass"] = st.text_input("Мастер-пароль админа", value=st.session_state.data["admin_pass"])
     
     st.write("")
     c1, c2 = st.columns(2)
-    with c1: 
-        if st.button("← НАЗАД"): prev_step(); st.rerun()
-    with c2: 
-        if st.button("К ВЫБОРУ ОПЛАТЫ →"): next_step(); st.rerun()
+    if c1.button("← НАЗАД"): prev_step(); st.rerun()
+    if c2.button("К ВЫБОРУ ОПЛАТЫ →"): next_step(); st.rerun()
 
-# --- ШАГ 3: ОПЛАТА ---
+# ШАГ 3
 elif st.session_state.step == 3:
     st.markdown("### 💳 03. Платёжные шлюзы")
     st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", 
@@ -156,22 +165,20 @@ elif st.session_state.step == 3:
                                                 default=["ЮMoney (API/Quickpay)"])
     st.write("")
     c1, c2 = st.columns(2)
-    with c1: 
-        if st.button("← НАЗАД"): prev_step(); st.rerun()
-    with c2: 
-        if st.button("⚡ СФОРМИРОВАТЬ ЭКСПЕРТНЫЙ ПРОМТ"): next_step(); st.rerun()
+    if c1.button("← НАЗАД"): prev_step(); st.rerun()
+    if c2.button("⚡ СФОРМИРОВАТЬ ЭКСПЕРТНЫЙ ПРОМТ"): next_step(); st.rerun()
 
-# --- ШАГ 4: ФИНАЛ ---
+# ШАГ 4
 elif st.session_state.step == 4:
     st.markdown("### 🚀 ВАША СИСТЕМНАЯ ИНСТРУКЦИЯ ГОТОВА")
     
     d = st.session_state.data
     
-    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом.
+    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки.
 
 ЗАДАЧА
-Создать высококонверсионный магазин "{d['name']}". 
-На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+Создать высококонверсионный, безопасный онлайн-магазин "{d['name']}". 
+Работай в режиме пошаговой выдачи файлов. На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
 
 ДАННЫЕ ПРОЕКТА
 - Название: {d['name']} | Цена: {d['price']} RUB
@@ -186,7 +193,7 @@ PHP 8.1+, SQLite3, Tailwind CSS (CDN), Mobile-first.
 index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callback.php.
 
 ПЛАТЕЖИ
-Интегрировать: {", ".join(d['pays'])}. Обязательна проверка контрольных подписей хэша.
+Интегрировать: {", ".join(d['pays'])}. Обязательна проверка контрольных подписей (SHA-1/HMAC).
 
 ДИЗАЙН
 Фон: {d['theme_color']} | Акцент: {d['accent_color']} | Стиль: Премиальный минимализм.
@@ -201,7 +208,7 @@ index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callb
     st.markdown(f"""
     <div class="instruction-card">
         <h4 style="color:#00f2ea; margin:0 0 10px 0;">📋 ИНСТРУКЦИЯ ПО ЗАПУСКУ:</h4>
-        <p style="font-size:0.9rem; margin:0;">1. Скопируйте текст выше.<br>2. Отправьте его в ChatGPT-4 или Claude 3.5.<br>3. Пишите ИИ: <b>"Создай файл config.php"</b>, а затем остальные.</p>
+        <p style="font-size:0.9rem; margin:0; color:#ddd;">1. Скопируйте текст выше.<br>2. Отправьте его в ChatGPT-4 или Claude 3.5.<br>3. Пишите ИИ: <b>"Создай файл config.php"</b>, а затем остальные.</p>
     </div>
     """, unsafe_allow_html=True)
 
