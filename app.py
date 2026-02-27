@@ -1,9 +1,9 @@
 import streamlit as st
 
 # 1. КОНФИГУРАЦИЯ
-st.set_page_config(page_title="AI TZ Premium", page_icon="🔮", layout="centered")
+st.set_page_config(page_title="AI TZ Expert v3.0", page_icon="💎", layout="centered")
 
-# 2. ДИЗАЙН (Улучшенный черный + Центрирование)
+# 2. КРУТОЙ ДИЗАЙН (Улучшенный черный + Центрирование)
 st.markdown("""
     <style>
     .stApp { background-color: #000000; color: #ffffff; }
@@ -12,29 +12,39 @@ st.markdown("""
         background: linear-gradient(90deg, #00f2ea, #00ff41);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: 3rem; font-weight: 800; margin-bottom: 0px;
+        font-size: 3.5rem; font-weight: 900; margin-bottom: 5px;
     }
-    .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 1.2rem; }
     
-    /* Стилизация рамок */
     div[data-baseweb="input"], div[data-baseweb="textarea"], div[data-baseweb="select"] {
-        border: 1px solid #1e1e1e !important;
-        border-radius: 12px !important;
-        background-color: #0a0a0a !important;
+        border: 1px solid #222 !important;
+        border-radius: 15px !important;
+        background-color: #050505 !important;
     }
     
-    .step-node { text-align: center; padding: 10px; border-bottom: 2px solid #1e1e1e; flex-grow: 1; color: #444; font-weight: bold; }
-    .step-node-active { color: #00f2ea; border-bottom: 2px solid #00f2ea; text-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+    .step-node { text-align: center; padding: 15px; border-bottom: 2px solid #111; flex-grow: 1; color: #333; font-size: 0.9rem; }
+    .step-node-active { color: #00f2ea; border-bottom: 2px solid #00f2ea; }
     
     .stButton > button {
         background: linear-gradient(135deg, #00f2ea 0%, #0072ff 100%) !important;
-        color: white !important; border: none !important; width: 100%; border-radius: 8px !important;
-        height: 50px; font-weight: bold !important; text-transform: uppercase;
+        color: white !important; border: none !important; width: 100%; border-radius: 12px !important;
+        height: 55px; font-weight: bold !important; font-size: 1.1rem;
+    }
+    
+    /* Оформление окна с результатом */
+    .result-box {
+        background-color: #0a0a0a;
+        padding: 30px;
+        border-radius: 20px;
+        border: 1px dashed #00f2ea;
+        font-family: 'Courier New', monospace;
+        color: #d1d1d1;
+        line-height: 1.6;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ИНИЦИАЛИЗАЦИЯ ДАННЫХ (Чтобы не было ошибок NameError)
+# 3. ЛОГИКА
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
@@ -42,93 +52,82 @@ if 'data' not in st.session_state:
         "style": "Минимализм", "pays": [], "security": False
     }
 
-def next_step(): st.session_state.step += 1
-def prev_step(): st.session_state.step -= 1
+# --- ШАПКА ---
+st.markdown('<div class="main-title">AI ARCHITECT</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">Генерация сверхточных системных инструкций</div>', unsafe_allow_html=True)
 
-# --- ЗАГОЛОВОК ---
-st.markdown('<div class="main-title">AI ГЕНЕРАТОР ТЗ</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">Создание системных инструкций для разработки</div>', unsafe_allow_html=True)
+# ИНДИКАТОР
+cols = st.columns(4)
+names = ["Продукт", "Визуал", "Стек", "Финал"]
+for i, n in enumerate(names):
+    active = "step-node-active" if st.session_state.step == i+1 else ""
+    cols[i].markdown(f'<div class="step-node {active}">{n}</div>', unsafe_allow_html=True)
 
-# --- ИНДИКАТОР ШАГОВ ---
-step_cols = st.columns(4)
-names = ["Продукт", "Стиль", "Оплата", "Финал"]
-for i, name in enumerate(names):
-    is_active = "step-node-active" if st.session_state.step == i + 1 else ""
-    step_cols[i].markdown(f'<div class="step-node {is_active}">{i+1}. {name}</div>', unsafe_allow_html=True)
+st.write("")
 
-st.write("") 
-
-# --- ШАГ 1: ПРОДУКТ ---
+# ШАГ 1
 if st.session_state.step == 1:
-    st.markdown("### 🛠 Информация о проекте")
-    st.session_state.data["name"] = st.text_input("Название магазина", value=st.session_state.data["name"], placeholder="Например: Digital Pro Store")
-    st.session_state.data["desc"] = st.text_area("Что продаёшь (подробно)", value=st.session_state.data["desc"], placeholder="Опиши продукт, какие проблемы он решает...", height=150)
-    st.session_state.data["aud"] = st.text_input("Целевая аудитория", value=st.session_state.data["aud"], placeholder="Например: владельцы малого бизнеса")
-    
-    if st.button("Далее: Внешний вид →"):
+    st.markdown("### 01. Контекст продукта")
+    st.session_state.data["name"] = st.text_input("Название бизнеса", value=st.session_state.data["name"])
+    st.session_state.data["desc"] = st.text_area("Суть предложения и УТП", value=st.session_state.data["desc"], height=120)
+    st.session_state.data["aud"] = st.text_input("Портрет клиента", value=st.session_state.data["aud"])
+    if st.button("ПРОДОЛЖИТЬ →"):
         if st.session_state.data["name"] and st.session_state.data["desc"]:
-            next_step()
+            st.session_state.step = 2
             st.rerun()
-        else: st.error("Заполни название и описание!")
 
-# --- ШАГ 2: ВИЗУАЛ ---
+# ШАГ 2
 elif st.session_state.step == 2:
-    st.markdown("### 🎨 Дизайн и Атмосфера")
-    st.session_state.data["theme"] = st.select_slider("Цветовая палитра", options=["Deep Black", "Cyber Blue", "Neon Green", "Royal Gold"], value=st.session_state.data["theme"])
-    st.session_state.data["style"] = st.radio("Стиль оформления", ["Минимализм", "Футуризм", "Классика", "Яркий"], horizontal=True, index=["Минимализм", "Футуризм", "Классика", "Яркий"].index(st.session_state.data["style"]))
-    
-    c1, c2 = st.columns(2)
-    with c1: 
-        if st.button("← Назад"): prev_step(); st.rerun()
-    with c2: 
-        if st.button("Далее: Оплата →"): next_step(); st.rerun()
+    st.markdown("### 02. Визуальная стратегия")
+    st.session_state.data["theme"] = st.select_slider("Атмосфера", options=["Black Luxe", "Tech Blue", "Organic Green", "Cyber Red"], value=st.session_state.data["theme"])
+    st.session_state.data["style"] = st.radio("Стиль интерфейса", ["Clean UI (Минимализм)", "Glassmorphism (Футуризм)", "Classic Business", "High Contrast"], horizontal=True)
+    col1, col2 = st.columns(2)
+    if col1.button("← НАЗАД"): st.session_state.step = 1; st.rerun()
+    if col2.button("ДАЛЕЕ →"): st.session_state.step = 3; st.rerun()
 
-# --- ШАГ 3: ОПЛАТА ---
+# ШАГ 3
 elif st.session_state.step == 3:
-    st.markdown("### ⚙️ Платежные системы")
-    st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", ["ЮMoney", "Криптовалюта", "Карты РФ", "PayPal"], default=st.session_state.data["pays"])
-    st.session_state.data["security"] = st.checkbox("Повышенная безопасность (SSL/Шифрование)", value=st.session_state.data["security"])
-    
-    c1, c2 = st.columns(2)
-    with c1: 
-        if st.button("← Назад"): prev_step(); st.rerun()
-    with c2: 
-        if st.button("🔮 Сгенерировать промт"): next_step(); st.rerun()
+    st.markdown("### 03. Технические требования")
+    st.session_state.data["pays"] = st.multiselect("Финансовые интеграции", ["Crypto (BTC/USDT)", "Visa/Mastercard", "Stripe", "Apple/Google Pay"], default=st.session_state.data["pays"])
+    st.session_state.data["security"] = st.toggle("Повышенный протокол безопасности данных", value=st.session_state.data["security"])
+    col1, col2 = st.columns(2)
+    if col1.button("← НАЗАД"): st.session_state.step = 2; st.rerun()
+    if col2.button("СФОРМИРОВАТЬ ЭКСПЕРТНОЕ ТЗ"): st.session_state.step = 4; st.rerun()
 
-# --- ШАГ 4: РЕЗУЛЬТАТ (Тот самый "Промт как у Орфеева") ---
+# ШАГ 4 - РЕЗУЛЬТАТ С МОЩНЫМ ПРОМТОМ
 elif st.session_state.step == 4:
-    st.markdown("### ✨ Ваше системное ТЗ готово!")
+    st.markdown("### 🔥 Ваш профессиональный System Prompt")
     
-    # ВОТ ЗДЕСЬ ЗАШИТ ШАБЛОН (ПРОМТ)
-    system_prompt = f"""Ты — senior full-stack разработчик с огромным опытом в e-commerce.
+    # ВОТ ЗДЕСЬ МЫ СОЗДАЕМ МОЩНЫЙ ПРОМТ
+    expert_prompt = f"""### SYSTEM ROLE
+Ты — Senior Solution Architect и ведущий Full-stack разработчик с 15-летним опытом в e-commerce и Fintech. Твоя специализация — создание высококонверсионных, безопасных и масштабируемых цифровых экосистем.
 
-## ЗАДАЧА
-Создать профессиональный онлайн-магазин цифровых товаров. 
-Название проекта: {st.session_state.data['name']}
+### PROJECT CONTEXT
+- **Бренд:** {st.session_state.data['name']}
+- **Бизнес-задача:** {st.session_state.data['desc']}
+- **Целевая аудитория:** {st.session_state.data['aud']}
 
-## ОПИСАНИЕ ПРОДУКТА
-{st.session_state.data['desc']}
-Целевая аудитория: {st.session_state.data['aud']}
+### ARCHITECTURAL REQUIREMENTS
+1. **Визуальный стек:** Реализовать стиль "{st.session_state.data['style']}" с использованием цветовой палитры "{st.session_state.data['theme']}". Фокус на UX: интуитивная навигация, скорость отклика < 200мс.
+2. **Финансовый уровень:** Интеграция {", ".join(st.session_state.data['pays']) if st.session_state.data['pays'] else "стандартных шлюзов"}. Архитектура транзакций должна быть атомарной и устойчивой к сбоям.
+3. **Безопасность:** {"Внедрить стандарт OWASP, сквозное шифрование данных и защиту от SQL-инъекций/XSS." if st.session_state.data['security'] else "Базовый уровень безопасности веб-приложения."}
 
-## ТЕХНИЧЕСКИЙ ДИЗАЙН
-- Цветовая схема: {st.session_state.data['theme']}
-- Визуальный стиль: {st.session_state.data['style']}
+### OPERATIONAL GUIDELINES
+- Пиши только чистый, самодокументированный код (DRY, SOLID).
+- Каждое решение должно быть обосновано с точки зрения SEO и конверсии (CRO).
+- Не используй лишних слов и вступлений. Сразу переходи к реализации.
+- На любые вопросы отвечай как технический директор (CTO): кратко, по делу, с акцентом на результат.
 
-## ФУНКЦИОНАЛ
-- Интеграция платежей: {", ".join(st.session_state.data['pays']) if st.session_state.data['pays'] else "Стандартная"}
-- Безопасность: {"Высокий приоритет (Шифрование)" if st.session_state.data['security'] else "Базовая"}
+### FIRST MISSION
+Проанализируй вводные данные и предложи структуру проекта, которая обеспечит максимальную производительность для сегмента "{st.session_state.data['aud']}". Жди моей команды для написания первого файла."""
 
-Твоя роль — выдавать только чистый код файлов по запросу, без лишних объяснений. Начнем с создания структуры базы данных. Жди моей команды."""
-
-    st.markdown('<div style="background-color: #0a0a0a; padding: 20px; border-radius: 12px; border: 1px solid #00f2ea;">', unsafe_allow_html=True)
-    st.markdown(f"```\n{system_prompt}\n```")
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="result-box"><pre style="white-space: pre-wrap;">{expert_prompt}</pre></div>', unsafe_allow_html=True)
     
     st.write("")
-    st.download_button("📥 Скачать файл промта", system_prompt)
-    if st.button("🔄 Начать заново"):
+    st.download_button("📥 СКАЧАТЬ ИНСТРУКЦИЮ (.TXT)", expert_prompt)
+    if st.button("🔄 НОВАЯ ГЕНЕРАЦИЯ"):
         st.session_state.step = 1
         st.rerun()
 
 st.write("---")
-st.caption("⚡ AI Premium System | Powered by Your Logic")
+st.caption("⚡ Enterprise AI Architect | Premium Generation Tool")
