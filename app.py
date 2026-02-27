@@ -1,43 +1,41 @@
 import streamlit as st
 
-# 1. КОНФИГУРАЦИЯ
+# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНАЯ ЗАЧИСТКА ХОСТИНГА
 st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
-# 2. УЛЬТРА-ОЧИСТКА И ПРЕМИУМ ДИЗАЙН
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* УДАЛЕНИЕ БРЕНДИНГА STREAMLIT (БЕЗ ПОЛОМКИ ВЕРСТКИ) */
-    #MainMenu {visibility: hidden;}
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-    .stDeployButton {display:none;}
+    /* --- 1. ТОТАЛЬНАЯ БЛОКИРОВКА ЭЛЕМЕНТОВ STREAMLIT --- */
+    #MainMenu {visibility: hidden !important;}
+    header {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    .stDeployButton {display:none !important;}
     
-    /* Агрессивное скрытие короны и надписи внизу */
-    div[data-testid="stDecoration"], 
+    /* Скрываем корону, статус-виджеты и любые ссылки на платформу */
+    [data-testid="stStatusWidget"], 
+    [data-testid="stHeader"], 
+    [data-testid="stDecoration"],
+    div[class^="viewerBadge"], 
     div[class*="viewerBadge"], 
-    div[class*="StyledLinkIcon"],
     a[href*="streamlit.io"] {
         display: none !important;
         visibility: hidden !important;
         opacity: 0 !important;
-        height: 0 !important;
         pointer-events: none !important;
+        height: 0 !important;
+        width: 0 !important;
     }
 
-    /* ОСНОВНОЙ СТИЛЬ */
-    .stApp { 
-        background-color: #000000 !important; 
-        color: #ffffff !important; 
-        font-family: 'Inter', sans-serif; 
-    }
-    
-    /* ТЕКСТЫ И ЗАГОЛОВКИ (ФИКС ВИДИМОСТИ) */
-    h1, h2, h3, p, span, label {
+    /* Принудительный черный фон для всего, включая скрытые зоны */
+    html, body, .stApp {
+        background-color: #000000 !important;
         color: #ffffff !important;
+        font-family: 'Inter', sans-serif;
     }
-    
+
+    /* --- 2. ПРЕМИАЛЬНЫЙ ДИЗАЙН --- */
     .main-title {
         text-align: center;
         background: linear-gradient(to right, #00f2ea, #00ff41, #7000ff);
@@ -58,17 +56,14 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
-    /* ПОЛЯ ВВОДА (ЧЕРНЫЕ С РАМКОЙ) */
+    /* Поля ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
-        border: 1px solid #333 !important;
+        border: 1px solid #1a1a1a !important;
         border-radius: 16px !important;
-        background-color: #0a0a0a !important;
+        background-color: #050505 !important;
     }
-    input, textarea {
-        color: #ffffff !important;
-    }
-
-    /* КНОПКИ ПЕРЕХОДА (НЕОН) */
+    
+    /* Кнопки навигации (Неон) */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: #ffffff !important;
@@ -78,14 +73,14 @@ st.markdown("""
         width: 100%;
         font-weight: 900 !important;
         text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(0, 242, 234, 0.3);
+        box-shadow: 0 4px 15px rgba(0, 242, 234, 0.2);
     }
     .stButton > button:hover {
-        box-shadow: 0 8px 30px rgba(0, 242, 234, 0.6);
+        box-shadow: 0 8px 30px rgba(0, 242, 234, 0.5);
         transform: translateY(-2px);
     }
 
-    /* КНОПКА СКАЧАТЬ (БЕЛАЯ С ЧЕРНЫМ ТЕКСТОМ) */
+    /* Кнопка СКАЧАТЬ (Белый Премиум) */
     .stDownloadButton > button {
         background: #ffffff !important;
         color: #000000 !important;
@@ -96,9 +91,10 @@ st.markdown("""
         font-weight: 900 !important;
         font-size: 1.3rem !important;
         text-transform: uppercase !important;
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.1) !important;
     }
 
-    /* ОКНО ПРОМТА */
+    /* Окно с результатом */
     .result-box {
         background: #080808;
         border: 1px solid #222;
@@ -106,11 +102,11 @@ st.markdown("""
         padding: 30px;
         font-family: 'Consolas', monospace;
         color: #e0e0e0;
-        line-height: 1.6;
+        line-height: 1.5;
         border-left: 5px solid #00f2ea;
     }
 
-    /* ИНСТРУКЦИЯ */
+    /* Карточка инструкции */
     .instruction-card {
         background: #0a0a0a;
         border: 1px solid #1ed760;
@@ -121,19 +117,20 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. ЛОГИКА ШАГОВ
+# 2. ЛОГИКА ШАГОВ
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
         "name": "", "price": "1000", "header": "", "sub": "", "desc": "", 
-        "features": "", "img_link": "", "theme_color": "#000000", 
-        "accent_color": "#00f2ea", "admin_pass": "MasterKey2026!", "pays": ["ЮMoney"]
+        "features": "", "cta": "ПОДТВЕРДИТЬ И ЗАКАЗАТЬ", "img_link": "", 
+        "theme_color": "#000000", "accent_color": "#00f2ea", 
+        "admin_pass": "MasterKey2026!", "pays": ["ЮMoney (Quickpay)"]
     }
 
 def next_step(): st.session_state.step += 1
 def prev_step(): st.session_state.step -= 1
 
-# --- ВИЗУАЛЬНАЯ ЧАСТЬ ---
+# --- ВИЗУАЛ ---
 st.markdown('<div class="main-title">AI ARCHITECT PRO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Enterprise Level Generation System</div>', unsafe_allow_html=True)
 
@@ -144,7 +141,7 @@ if st.session_state.step == 1:
     st.session_state.data["header"] = st.text_input("Главный оффер (Заголовок H1)", value=st.session_state.data["header"])
     st.session_state.data["sub"] = st.text_input("Подзаголовок (УТП)", value=st.session_state.data["sub"])
     st.session_state.data["desc"] = st.text_area("Детальное описание продукта", value=st.session_state.data["desc"], height=100)
-    st.session_state.data["img_link"] = st.text_input("Ссылка на картинку или референс", value=st.session_state.data["img_link"])
+    st.session_state.data["img_link"] = st.text_input("Ссылка на картинку товара или референс", value=st.session_state.data["img_link"])
     st.session_state.data["features"] = st.text_area("Преимущества (каждое с новой строки)", value=st.session_state.data["features"])
     st.session_state.data["price"] = st.text_input("Цена товара (в рублях)", value=st.session_state.data["price"])
     
@@ -153,7 +150,7 @@ if st.session_state.step == 1:
         if st.session_state.data["name"] and st.session_state.data["header"]:
             next_step()
             st.rerun()
-        else: st.error("Заполните название и заголовок!")
+        else: st.error("Заполните обязательные поля!")
 
 # ШАГ 2
 elif st.session_state.step == 2:
@@ -175,8 +172,8 @@ elif st.session_state.step == 2:
 elif st.session_state.step == 3:
     st.markdown("### 💳 03. Платёжные шлюзы")
     st.session_state.data["pays"] = st.multiselect("Выберите методы оплаты", 
-                                                ["ЮMoney (API)", "NowPayments (Крипто)", "Stripe", "PayPal"], 
-                                                default=["ЮMoney (API)"])
+                                                ["ЮMoney (API/Quickpay)", "NowPayments (Крипто)", "Stripe", "PayPal"], 
+                                                default=["ЮMoney (API/Quickpay)"])
     st.write("")
     c1, c2 = st.columns(2)
     if c1.button("← НАЗАД"): prev_step(); st.rerun()
@@ -188,45 +185,44 @@ elif st.session_state.step == 4:
     
     d = st.session_state.data
     
-    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки e-commerce систем.
+    # МОЩНЫЙ ПРОМТ
+    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом разработки. 
 
-ЗАДАЧА
-Создать высококонверсионный магазин "{d['name']}". 
-На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+ЗАДАЧА: Спроектировать высококонверсионный, безопасный онлайн-магазин "{d['name']}". 
+ИНСТРУКЦИЯ: На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
 
-ДАННЫЕ ПРОЕКТА
+ДАННЫЕ ПРОЕКТА:
 - Название: {d['name']} | Цена: {d['price']} RUB
-- H1: {d['header']} | Sub: {d['sub']}
-- Референс: {d['img_link'] if d['img_link'] else 'standard_placeholder.jpg'}
-- Преимущества: {d['features'].replace('\\n', ', ')}
+- Контент: {d['header']} / {d['sub']}
+- Референс дизайна: {d['img_link'] if d['img_link'] else 'standard_placeholder.jpg'}
+- Особенности: {d['features'].replace('\\n', ', ')}
 
-ТЕХНИЧЕСКИЙ СТЕК
+ТЕХНИЧЕСКИЙ СТЕК:
 PHP 8.1+, SQLite3, Tailwind CSS (CDN), Mobile-first архитектура.
 
-СТРУКТУРА ФАЙЛОВ
+СТРУКТУРА ФАЙЛОВ:
 index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callback.php.
 
-ПЛАТЕЖИ
-Интегрировать: {", ".join(d['pays'])}. Обязательна проверка контрольных подписей (SHA-1/HMAC).
+ПЛАТЕЖИ:
+Интегрировать: {", ".join(d['pays'])}. Проверка контрольных подписей (SHA-1/HMAC) обязательна.
 
-ДИЗАЙН
+ДИЗАЙН:
 Фон: {d['theme_color']} | Акцент: {d['accent_color']} | Стиль: Премиальный минимализм.
 
-ПЕРВАЯ МИССИЯ
-Проанализируй вводные данные. Предложи структуру БД и архитектуру взаимодействия файлов. Жди моей команды для кода первого файла."""
+ПЕРВАЯ МИССИЯ:
+Проанализируй вводные данные. Предложи структуру БД и архитектуру. Жди моей команды для кода config.php."""
 
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
     st.code(expert_prompt, language="text")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ИНСТРУКЦИЯ ДЛЯ КЛИЕНТА
     st.markdown(f"""
     <div class="instruction-card">
         <h4 style="color:#1ed760; margin:0 0 10px 0;">📋 ЧТО ДЕЛАТЬ ДАЛЬШЕ?</h4>
         <ol style="font-size:0.95rem; margin:0; color:#eee;">
             <li>Нажмите на иконку копирования в углу черного блока выше.</li>
             <li>Откройте <b>ChatGPT-4</b> или <b>Claude 3.5 Sonnet</b>.</li>
-            <li>Вставьте скопированный текст первым сообщением. Это "обучит" ИИ.</li>
+            <li>Вставьте скопированный текст первым сообщением. Это "обучит" ИИ вашему проекту.</li>
             <li>Когда ИИ ответит, напишите ему: <b>"Создай файл config.php"</b>.</li>
             <li>Затем по очереди запрашивайте остальные файлы из списка.</li>
         </ol>
