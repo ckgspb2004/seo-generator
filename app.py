@@ -1,44 +1,49 @@
 import streamlit as st
 
-# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНОЕ СКРЫТИЕ СЕРВИСНЫХ ЭЛЕМЕНТОВ
+# 1. КОНФИГУРАЦИЯ И ПРИНУДИТЕЛЬНАЯ ЗАЧИСТКА ПЛАТФОРМЫ
 st.set_page_config(page_title="AI Architecture PRO 2026", page_icon="💎", layout="centered")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
     
-    /* УЛЬТРА-ОЧИСТКА: Убираем всё, что связано со Streamlit */
+    /* --- МАКСИМАЛЬНАЯ ОЧИСТКА ОТ БРЕНДИНГА STREAMLIT --- */
+    
+    /* Скрываем стандартное меню, хедер и футер */
     #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
-    .stDeployButton {display:none;}
-    [data-testid="stHeader"] {display:none;}
-    [data-testid="stFooter"] {display:none;}
-    [data-testid="stStatusWidget"] {display:none;}
+    [data-testid="stHeader"] {display: none !important;}
+    [data-testid="stFooter"] {display: none !important;}
     
-    /* ЦЕЛЕВОЕ УДАЛЕНИЕ КРАСНОЙ КНОПКИ (КОРОНЫ) */
+    /* Убираем кнопку Deploy и статус-виджеты */
+    .stDeployButton {display:none !important;}
+    [data-testid="stStatusWidget"] {display:none !important;}
+    
+    /* УНИЧТОЖАЕМ КРАСНУЮ КНОПКУ (КОРОНУ) И НАДПИСЬ HOSTED WITH STREAMLIT */
+    /* Бьем по всем возможным классам и ссылкам */
     div[class^="viewerBadge"], 
     div[class*="viewerBadge"], 
-    div[data-testid="stNotification"],
     div[class^="StyledLinkIcon"],
-    a[href*="streamlit.io"] {
+    div[data-testid="stDecoration"],
+    a[href*="streamlit.io"],
+    #root > div:nth-child(1) > div > div > div > div > section > div > div:nth-child(1) > div > div:nth-child(1) > div > div {
         display: none !important;
         visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
         opacity: 0 !important;
         pointer-events: none !important;
-        height: 0 !important;
-        width: 0 !important;
     }
-    
-    /* Блокировка нижнего края страницы от мусора */
-    .stApp > footer { display: none !important; }
-    
-    /* 2. ПРЕМИАЛЬНЫЙ ДИЗАЙН САЙТА */
-    .stApp { 
-        background-color: #000000 !important; 
-        color: #ffffff; 
-        font-family: 'Inter', sans-serif; 
+
+    /* Создаем "черную зону" внизу, чтобы ничего не просочилось */
+    .stApp {
+        background-color: #000000 !important;
+        margin-bottom: -50px !important;
     }
+
+    /* --- ПРЕМИАЛЬНЫЙ ДИЗАЙН ИНТЕРФЕЙСА --- */
+    .stApp { color: #ffffff; font-family: 'Inter', sans-serif; }
     
     .main-title {
         text-align: center;
@@ -60,14 +65,13 @@ st.markdown("""
         letter-spacing: 3px;
     }
 
-    /* Рамки полей ввода */
     div[data-baseweb="input"], div[data-baseweb="textarea"] {
         border: 1px solid #1a1a1a !important;
         border-radius: 16px !important;
         background-color: #050505 !important;
     }
-
-    /* Кнопки перехода (градиент и свечение) */
+    
+    /* Неоновые кнопки навигации */
     .stButton > button {
         background: linear-gradient(90deg, #00f2ea, #0072ff) !important;
         color: white !important;
@@ -81,10 +85,9 @@ st.markdown("""
     }
     .stButton > button:hover {
         box-shadow: 0 8px 30px rgba(0, 242, 234, 0.5);
-        transform: translateY(-2px);
     }
 
-    /* Кнопка СКАЧАТЬ (Белый премиум) */
+    /* Кнопка СКАЧАТЬ (Черный текст на белом - МАКСИМАЛЬНО ВИДИМАЯ) */
     .stDownloadButton > button {
         background: #ffffff !important;
         color: #000000 !important;
@@ -95,7 +98,8 @@ st.markdown("""
         font-weight: 900 !important;
         font-size: 1.3rem !important;
         text-transform: uppercase !important;
-        box-shadow: 0 0 25px rgba(0, 242, 234, 0.3) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
     }
 
     .result-box {
@@ -119,7 +123,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. СОХРАНЕНИЕ ДАННЫХ
+# 2. ЛОГИКА ШАГОВ
 if 'step' not in st.session_state: st.session_state.step = 1
 if 'data' not in st.session_state:
     st.session_state.data = {
@@ -132,7 +136,7 @@ if 'data' not in st.session_state:
 def next_step(): st.session_state.step += 1
 def prev_step(): st.session_state.step -= 1
 
-# --- ШАПКА САЙТА ---
+# --- ШАПКА ---
 st.markdown('<div class="main-title">AI ARCHITECT PRO</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Enterprise Level Generation System</div>', unsafe_allow_html=True)
 
@@ -181,38 +185,38 @@ elif st.session_state.step == 3:
     if c1.button("← НАЗАД"): prev_step(); st.rerun()
     if c2.button("⚡ СФОРМИРОВАТЬ ЭКСПЕРТНЫЙ ПРОМТ"): next_step(); st.rerun()
 
-# --- ШАГ 4: РЕЗУЛЬТАТ (ПРОМТ) ---
+# --- ШАГ 4: ФИНАЛ ---
 elif st.session_state.step == 4:
     st.markdown("### 🚀 ВАША СИСТЕМНАЯ ИНСТРУКЦИЯ ГОТОВА")
     
     d = st.session_state.data
     
-    # ЭКСПЕРТНЫЙ ПРОМТ-АРХИТЕКТОР
-    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом. 
+    expert_prompt = f"""Ты — Senior Full-Stack Architect и CTO с 15-летним опытом.
 
-ЗАДАЧА: Спроектировать высококонверсионный магазин "{d['name']}". 
-ИНСТРУКЦИЯ: На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
+ЗАДАЧА
+Создать высококонверсионный магазин "{d['name']}". 
+На мой запрос "создай [имя файла]" выдавай ТОЛЬКО чистый код без пояснений.
 
-ДАННЫЕ ПРОЕКТА:
-- Бренд: {d['name']} | Цена: {d['price']} RUB
+ДАННЫЕ ПРОЕКТА
+- Название: {d['name']} | Цена: {d['price']} RUB
 - Контент: {d['header']} / {d['sub']}
 - Референс: {d['img_link'] if d['img_link'] else 'standard_placeholder.jpg'}
 - Особенности: {d['features'].replace('\\n', ', ')}
 
-ТЕХНИЧЕСКИЙ СТЕК:
+ТЕХНИЧЕСКИЙ СТЕК
 PHP 8.1+, SQLite3, Tailwind CSS (CDN), Mobile-first архитектура.
 
-ФАЙЛЫ:
+СТРУКТУРА ФАЙЛОВ
 index.php, config.php, admin.php (pass: {d['admin_pass']}), thank_you.php, callback.php.
 
-ПЛАТЕЖИ:
-Интегрировать: {", ".join(d['pays'])}. Проверка SHA-1/HMAC подписей обязательна.
+ПЛАТЕЖИ
+Интегрировать: {", ".join(d['pays'])}. Обязательна проверка контрольных подписей (SHA-1/HMAC).
 
-ДИЗАЙН:
+ДИЗАЙН
 Фон: {d['theme_color']} | Акцент: {d['accent_color']} | Стиль: Премиальный минимализм.
 
-ПЕРВАЯ МИССИЯ:
-Проанализируй вводные. Предложи структуру БД. Жди моей команды для кода config.php."""
+ПЕРВАЯ МИССИЯ
+Проанализируй вводные данные. Предложи структуру БД. Жди моей команды для кода config.php."""
 
     st.markdown('<div class="result-box">', unsafe_allow_html=True)
     st.code(expert_prompt, language="text")
